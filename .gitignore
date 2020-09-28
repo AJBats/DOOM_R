@@ -1,0 +1,6 @@
+*.i
+*.s
+*.o
+*.d
+*.vscode
+compile_commands.json
