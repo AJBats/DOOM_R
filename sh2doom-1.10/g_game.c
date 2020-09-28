@@ -20,10 +20,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
-
 #include <string.h>
 #include <stdlib.h>
 
@@ -221,7 +217,7 @@ int G_CmdChecksum (ticcmd_t* cmd)
     int		i;
     int		sum = 0; 
 	 
-    for (i=0 ; i< sizeof(*cmd)/4 - 1 ; i++) 
+    for (i=0 ; i< (int)sizeof(*cmd)/4 - 1 ; i++) 
 	sum += ((int *)cmd)[i]; 
 		 
     return sum; 
@@ -352,7 +348,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
 	forward += forwardmove[speed];
     
     // forward double click
-    if (mousebuttons[mousebforward] != dclickstate && dclicktime > 1 ) 
+    if (mousebuttons[mousebforward] != (boolean)dclickstate && dclicktime > 1 ) 
     { 
 	dclickstate = mousebuttons[mousebforward]; 
 	if (dclickstate) 
@@ -379,7 +375,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     bstrafe =
 	mousebuttons[mousebstrafe] 
 	|| joybuttons[joybstrafe]; 
-    if (bstrafe != dclickstate2 && dclicktime2 > 1 ) 
+    if (bstrafe != (boolean)dclickstate2 && dclicktime2 > 1 ) 
     { 
 	dclickstate2 = bstrafe; 
 	if (dclickstate2) 
@@ -456,8 +452,8 @@ void G_DoLoadLevel (void)
     // DOOM determines the sky texture to be used
     // depending on the current episode, and the game version.
     if ( (gamemode == commercial)
-	 || ( gamemode == pack_tnt )
-	 || ( gamemode == pack_plut ) )
+	 || ( gamemode == (GameMode_t)pack_tnt )
+	 || ( gamemode == (GameMode_t)pack_plut ) )
     {
 	skytexture = R_TextureNumForName ("SKY3");
 	if (gamemap < 12)
@@ -760,10 +756,11 @@ void G_Ticker (void)
 //
 void G_InitPlayer (int player) 
 { 
-    player_t*	p; 
+    // AJ variable p set but not used
+    //player_t*	p; 
  
     // set up the saved info         
-    p = &players[player]; 
+    //p = &players[player]; 
 	 
     // clear everything else to defaults 
     G_PlayerReborn (player); 
@@ -1141,6 +1138,7 @@ void G_DoCompleted (void)
 } 
 
 
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 //
 // G_WorldDone 
 //
@@ -1168,6 +1166,7 @@ void G_WorldDone (void)
 	}
     }
 } 
+#pragma GCC diagnostic pop // "-Wimplicit-fallthrough"
  
 void G_DoWorldDone (void) 
 {        
@@ -1200,20 +1199,22 @@ void G_LoadGame (char* name)
 
 void G_DoLoadGame (void) 
 { 
-    int		length; 
+    // AJ length set but not used
+    //int		length; 
     int		i; 
     int		a,b,c; 
     char	vcheck[VERSIONSIZE]; 
 	 
     gameaction = ga_nothing; 
 	 
-    length = M_ReadFile (savename, &savebuffer); 
+    //length = M_ReadFile (savename, &savebuffer); 
+    M_ReadFile (savename, &savebuffer); 
     save_p = savebuffer + SAVESTRINGSIZE;
     
     // skip the description field 
     memset (vcheck,0,sizeof(vcheck)); 
     sprintf (vcheck,"version %i",VERSION); 
-    if (strcmp (save_p, vcheck)) 
+    if (strcmp ((char*)save_p, vcheck)) 
 	return;				// bad version 
     save_p += VERSIONSIZE; 
 			 
@@ -1588,7 +1589,8 @@ void G_DoPlayDemo (void)
     demobuffer = demo_p = W_CacheLumpName (defdemoname, PU_STATIC); 
     if ( *demo_p++ != VERSION)
     {
-      fprintf( stderr, "Demo is from a different game version!\n");
+      // AJTODO would be cool to have errors show on screen.
+      //fprintf( stderr, "Demo is from a different game version!\n");
       gameaction = ga_nothing;
       return;
     }

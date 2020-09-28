@@ -22,10 +22,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char rcsid[] = "$Id: f_wipe.c,v 1.2 1997/02/03 22:45:09 b1 Exp $";
-
-
-
 #include "z_zone.h"
 #include "i_video.h"
 #include "v_video.h"
@@ -46,7 +42,7 @@ static byte*	wipe_scr_start;
 static byte*	wipe_scr_end;
 static byte*	wipe_scr;
 
-
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void
 wipe_shittyColMajorXform
 ( short*	array,
@@ -134,8 +130,7 @@ wipe_exitColorXForm
     return 0;
 }
 
-
-static int*	y;
+static int*	sY;
 
 int
 wipe_initMelt
@@ -154,19 +149,20 @@ wipe_initMelt
     wipe_shittyColMajorXform((short*)wipe_scr_end, width/2, height);
     
     // setup initial column positions
-    // (y<0 => not ready to scroll yet)
-    y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
-    y[0] = -(M_Random()%16);
+    // (sY<0 => not ready to scroll yet)
+    sY = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
+    sY[0] = -(M_Random()%16);
     for (i=1;i<width;i++)
     {
 	r = (M_Random()%3) - 1;
-	y[i] = y[i-1] + r;
-	if (y[i] > 0) y[i] = 0;
-	else if (y[i] == -16) y[i] = -15;
+	sY[i] = sY[i-1] + r;
+	if (sY[i] > 0) sY[i] = 0;
+	else if (sY[i] == -16) sY[i] = -15;
     }
 
     return 0;
 }
+
 
 int
 wipe_doMelt
@@ -189,27 +185,27 @@ wipe_doMelt
     {
 	for (i=0;i<width;i++)
 	{
-	    if (y[i]<0)
+	    if (sY[i]<0)
 	    {
-		y[i]++; done = false;
+		sY[i]++; done = false;
 	    }
-	    else if (y[i] < height)
+	    else if (sY[i] < height)
 	    {
-		dy = (y[i] < 16) ? y[i]+1 : 8;
-		if (y[i]+dy >= height) dy = height - y[i];
-		s = &((short *)wipe_scr_end)[i*height+y[i]];
-		d = &((short *)wipe_scr)[y[i]*width+i];
+		dy = (sY[i] < 16) ? sY[i]+1 : 8;
+		if (sY[i]+dy >= height) dy = height - sY[i];
+		s = &((short *)wipe_scr_end)[i*height+sY[i]];
+		d = &((short *)wipe_scr)[sY[i]*width+i];
 		idx = 0;
 		for (j=dy;j;j--)
 		{
 		    d[idx] = *(s++);
 		    idx += width;
 		}
-		y[i] += dy;
+		sY[i] += dy;
 		s = &((short *)wipe_scr_start)[i*height];
-		d = &((short *)wipe_scr)[y[i]*width+i];
+		d = &((short *)wipe_scr)[sY[i]*width+i];
 		idx = 0;
-		for (j=height-y[i];j;j--)
+		for (j=height-sY[i];j;j--)
 		{
 		    d[idx] = *(s++);
 		    idx += width;
@@ -223,13 +219,14 @@ wipe_doMelt
 
 }
 
+
 int
 wipe_exitMelt
 ( int	width,
   int	height,
   int	ticks )
 {
-    Z_Free(y);
+    Z_Free(sY);
     return 0;
 }
 
@@ -300,3 +297,5 @@ wipe_ScreenWipe
     return !go;
 
 }
+
+#pragma GCC diagnostic pop // "-Wunused-parameter"

@@ -36,6 +36,8 @@
 // We need the playr data structure as well.
 #include "d_player.h"
 
+#include "dummyfile.h"
+
 
 #ifdef __GNUG__
 #pragma interface

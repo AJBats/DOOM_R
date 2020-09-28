@@ -25,8 +25,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
-
 #define	BGCOLOR		7
 #define	FGCOLOR		8
 
@@ -39,6 +37,11 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <sys/stat.h>
 #include <fcntl.h>
 #endif
+
+// SH2 includes
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
 
 
 #include "doomdef.h"
@@ -150,7 +153,8 @@ int 		eventtail;
 void D_PostEvent (event_t* ev)
 {
     events[eventhead] = *ev;
-    eventhead = (++eventhead)&(MAXEVENTS-1);
+	++eventhead;
+    eventhead = eventhead & (MAXEVENTS-1);
 }
 
 
@@ -167,7 +171,7 @@ void D_ProcessEvents (void)
 	 && (W_CheckNumForName("map01")<0) )
       return;
 	
-    for ( ; eventtail != eventhead ; eventtail = (++eventtail)&(MAXEVENTS-1) )
+    for ( ; eventtail != eventhead ; ++eventtail, eventtail = eventtail & (MAXEVENTS-1) )
     {
 	ev = &events[eventtail];
 	if (M_Responder (ev))
@@ -562,7 +566,8 @@ void D_AddFile (char *file)
 //
 void IdentifyVersion (void)
 {
-
+	// AJTODO this function will need to be rewritten	
+#if 0
     char*	doom1wad;
     char*	doomwad;
     char*	doomuwad;
@@ -714,6 +719,7 @@ void IdentifyVersion (void)
     // We don't abort. Let's see what the PWAD contains.
     //exit(1);
     //I_Error ("Game mode indeterminate\n");
+#endif
 }
 
 //
@@ -721,6 +727,8 @@ void IdentifyVersion (void)
 //
 void FindResponseFile (void)
 {
+	// AJTODO rewrite this function... Also.. figure out what it's even doing????
+#if 0
     int             i;
 #define MAXARGVS        100
 	
@@ -742,7 +750,7 @@ void FindResponseFile (void)
 	    if (!handle)
 	    {
 		printf ("\nNo such response file!");
-		exit(1);
+		abort();
 	    }
 	    printf("Found response file %s!\n",&myargv[i][1]);
 	    fseek (handle,0,SEEK_END);
@@ -787,6 +795,7 @@ void FindResponseFile (void)
 
 	    break;
 	}
+#endif
 }
 
 
@@ -802,7 +811,6 @@ void D_DoomMain (void)
 	
     IdentifyVersion ();
 	
-    setbuf (stdout, NULL);
     modifiedgame = false;
 	
     nomonsters = M_CheckParm ("-nomonsters");
@@ -873,13 +881,6 @@ void D_DoomMain (void)
 
     if (devparm)
 	printf(D_DEVSTR);
-    
-    if (M_CheckParm("-cdrom"))
-    {
-	printf(D_CDROM);
-	mkdir("c:\\doomdata",0);
-	strcpy (basedefault,"c:/doomdata/default.cfg");
-    }	
     
     // turbo option
     if ( (p=M_CheckParm ("-turbo")) )
@@ -1057,7 +1058,8 @@ void D_DoomMain (void)
 	    "                      press enter to continue\n"
 	    "===========================================================================\n"
 	    );
-	getchar ();
+	// AJTODO setup controller to do getchar
+	//getchar ();
     }
 	
 
