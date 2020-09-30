@@ -25,9 +25,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_spec.c,v 1.6 1997/02/03 22:45:12 b1 Exp $";
-
 #include <stdlib.h>
 
 #include "doomdef.h"
@@ -128,7 +125,7 @@ animdef_t		animdefs[] =
     {true,	"WFALL4",	"WFALL1",	8},
     {true,	"DBRAIN4",	"DBRAIN1",	8},
 	
-    {-1}
+    {-1,    "",         "",         0}
 };
 
 anim_t		anims[MAXANIMS];
@@ -152,7 +149,7 @@ void P_InitPicAnims (void)
     
     //	Init animation
     lastanim = anims;
-    for (i=0 ; animdefs[i].istexture != -1 ; i++)
+    for (i=0 ; (int)animdefs[i].istexture != -1 ; i++)
     {
 	if (animdefs[i].istexture)
 	{
@@ -354,8 +351,8 @@ P_FindNextHighestFloor
 	// Check for overflow. Exit.
 	if ( h >= MAX_ADJOINING_SECTORS )
 	{
-	    fprintf( stderr,
-		     "Sector with more than 20 adjoining sectors\n" );
+	    //fprintf( stderr,
+		//     "Sector with more than 20 adjoining sectors\n" );
 	    break;
 	}
     }
@@ -1184,7 +1181,9 @@ int EV_DoDonut(line_t*	line)
 	s2 = getNextSector(s1->lines[0],s1);
 	for (i = 0;i < s2->linecount;i++)
 	{
-	    if ((!s2->lines[i]->flags & ML_TWOSIDED) ||
+		// AJTODO you guessed at code intention. What was right?
+		// (!s2->lines[i]->flags & ML_TWOSIDED) original
+	    if (!(s2->lines[i]->flags & ML_TWOSIDED) ||
 		(s2->lines[i]->backsector == s1))
 		continue;
 	    s3 = s2->lines[i]->backsector;
@@ -1240,12 +1239,8 @@ void P_SpawnSpecials (void)
 {
     sector_t*	sector;
     int		i;
-    int		episode;
 
-    episode = 1;
     if (W_CheckNumForName("texture2") >= 0)
-	episode = 2;
-
     
     // See if -TIMER needs to be used.
     levelTimer = false;
@@ -1322,7 +1317,7 @@ void P_SpawnSpecials (void)
 
 	  case 14:
 	    // DOOR RAISE IN 5 MINUTES
-	    P_SpawnDoorRaiseIn5Mins (sector, i);
+	    P_SpawnDoorRaiseIn5Mins (sector);
 	    break;
 	    
 	  case 17:

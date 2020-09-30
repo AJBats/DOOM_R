@@ -21,9 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_floor.c,v 1.4 1997/02/03 16:47:54 b1 Exp $";
-
 
 #include "z_zone.h"
 #include "doomdef.h"
@@ -253,6 +250,7 @@ void T_MoveFloor(floormove_t* floor)
 
 }
 
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 //
 // HANDLE FLOOR TYPES
 //
@@ -442,7 +440,7 @@ EV_DoFloor
     }
     return rtn;
 }
-
+#pragma GCC diagnostic pop
 
 
 
@@ -467,8 +465,8 @@ EV_BuildStairs
 
     floormove_t*	floor;
     
-    fixed_t		stairsize;
-    fixed_t		speed;
+    fixed_t		stairsize = 0;
+    fixed_t		speed = 0;
 
     secnum = -1;
     rtn = 0;

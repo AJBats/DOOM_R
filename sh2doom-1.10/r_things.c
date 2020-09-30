@@ -22,10 +22,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
-
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -395,9 +391,7 @@ void R_DrawMaskedColumn (column_t* column)
 //
 void
 R_DrawVisSprite
-( vissprite_t*		vis,
-  int			x1,
-  int			x2 )
+( vissprite_t*		vis)
 {
     column_t*		column;
     int			texturecolumn;
@@ -504,7 +498,7 @@ void R_ProjectSprite (mobj_t* thing)
     
     // decide which patch to use for sprite relative to player
 #ifdef RANGECHECK
-    if ((unsigned)thing->sprite >= numsprites)
+    if ((int)thing->sprite >= numsprites)
 	I_Error ("R_ProjectSprite: invalid sprite number %i ",
 		 thing->sprite);
 #endif
@@ -657,7 +651,7 @@ void R_DrawPSprite (pspdef_t* psp)
     
     // decide which patch to use
 #ifdef RANGECHECK
-    if ( (unsigned)psp->state->sprite >= numsprites)
+    if ( (int)psp->state->sprite >= numsprites)
 	I_Error ("R_ProjectSprite: invalid sprite number %i ",
 		 psp->state->sprite);
 #endif
@@ -735,7 +729,7 @@ void R_DrawPSprite (pspdef_t* psp)
 	vis->colormap = spritelights[MAXLIGHTSCALE-1];
     }
 	
-    R_DrawVisSprite (vis, vis->x1, vis->x2);
+    R_DrawVisSprite (vis);
 }
 
 
@@ -812,7 +806,7 @@ void R_SortVisSprites (void)
     unsorted.prev = vissprite_p-1;
     
     // pull the vissprites out by scale
-    //best = 0;		// shut up the compiler warning
+    best = 0;		// shut up the compiler warning
     vsprsortedhead.next = vsprsortedhead.prev = &vsprsortedhead;
     for (i=0 ; i<count ; i++)
     {
@@ -825,6 +819,7 @@ void R_SortVisSprites (void)
 		best = ds;
 	    }
 	}
+    //assert(best); // AJTODO can we get assert on saturn?
 	best->next->prev = best->prev;
 	best->prev->next = best->next;
 	best->next = &vsprsortedhead;
@@ -946,7 +941,7 @@ void R_DrawSprite (vissprite_t* spr)
 		
     mfloorclip = clipbot;
     mceilingclip = cliptop;
-    R_DrawVisSprite (spr, spr->x1, spr->x2);
+    R_DrawVisSprite (spr);
 }
 
 

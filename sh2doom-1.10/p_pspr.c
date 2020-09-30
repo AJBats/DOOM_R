@@ -22,9 +22,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_pspr.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
-
 #include "doomdef.h"
 #include "d_event.h"
 
@@ -51,6 +48,7 @@ rcsid[] = "$Id: p_pspr.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 // plasma cells for a bfg attack
 #define BFGCELLS		40		
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 //
 // P_SetPsprite
@@ -527,7 +525,7 @@ A_Saw
 			     linetarget->x, linetarget->y);
     if (angle - player->mo->angle > ANG180)
     {
-	if (angle - player->mo->angle < -ANG90/20)
+	if ((int)(angle - player->mo->angle) < -ANG90/20)
 	    player->mo->angle = angle + ANG90/21;
 	else
 	    player->mo->angle -= ANG90/20;
@@ -876,4 +874,4 @@ void P_MovePsprites (player_t* player)
     player->psprites[ps_flash].sy = player->psprites[ps_weapon].sy;
 }
 
-
+#pragma GCC diagnostic pop

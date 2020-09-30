@@ -21,8 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
+// AJTODO Implement sound
+#if 0
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,23 +30,23 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
 #include <math.h>
 
-#include <sys/time.h>
+//#include <sys/time.h>
 #include <sys/types.h>
 
-#ifndef LINUX
-#include <sys/filio.h>
-#endif
+//#ifndef LINUX
+//#include <sys/filio.h>
+//#endif
 
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
+//#include <fcntl.h>
+//#include <unistd.h>
+//#include <sys/ioctl.h>
 
 // Linux voxware output.
-#include <linux/soundcard.h>
+//#include <linux/soundcard.h>
 
 // Timer stuff. Experimental.
-#include <time.h>
-#include <signal.h>
+//#include <time.h>
+//#include <signal.h>
 
 #include "z_zone.h"
 
@@ -983,3 +983,5 @@ void I_SoundDelTimer()
   if ( I_SoundSetTimer( 0 ) == -1)
     fprintf( stderr, "I_SoundDelTimer: failed to remove interrupt. Doh!\n");
 }
+
+#endif

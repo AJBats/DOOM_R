@@ -21,14 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: r_segs.c,v 1.3 1997/01/29 20:10:19 b1 Exp $";
-
-
-
-
-
 #include <stdlib.h>
 
 #include "i_system.h"
@@ -214,7 +206,7 @@ void R_RenderSegLoop (void)
     int			top;
     int			bottom;
 
-    //texturecolumn = 0;				// shut up compiler warning
+    texturecolumn = 0;				// shut up compiler warning
 	
     for ( ; rw_x < rw_stopx ; rw_x++)
     {

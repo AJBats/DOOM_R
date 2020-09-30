@@ -20,9 +20,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_ceilng.c,v 1.4 1997/02/03 16:47:53 b1 Exp $";
-
 
 #include "z_zone.h"
 #include "doomdef.h"
@@ -41,6 +38,7 @@ rcsid[] = "$Id: p_ceilng.c,v 1.4 1997/02/03 16:47:53 b1 Exp $";
 // CEILINGS
 //
 
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 
 ceiling_t*	activeceilings[MAXCEILINGS];
 
@@ -333,3 +331,5 @@ int	EV_CeilingCrushStop(line_t	*line)
 
     return rtn;
 }
+
+#pragma GCC diagnostic pop // "-Wimplicit-fallthrough"

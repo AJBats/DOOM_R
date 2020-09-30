@@ -20,17 +20,13 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include <stdarg.h>
-#include <sys/time.h>
-#include <unistd.h>
+//#include <sys/time.h>
+//#include <unistd.h>
 
 #include "doomdef.h"
 #include "m_misc.h"
@@ -50,16 +46,6 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
 int	mb_used = 6;
 
-
-void
-I_Tactile
-( int	on,
-  int	off,
-  int	total )
-{
-  // UNUSED.
-  on = off = total = 0;
-}
 
 ticcmd_t	emptycmd;
 ticcmd_t*	I_BaseTiccmd(void)
@@ -87,6 +73,8 @@ byte* I_ZoneBase (int*	size)
 //
 int  I_GetTime (void)
 {
+    // AJTODO Reimplement
+#if 0
     struct timeval	tp;
     struct timezone	tzp;
     int			newtics;
@@ -97,6 +85,8 @@ int  I_GetTime (void)
 	basetime = tp.tv_sec;
     newtics = (tp.tv_sec-basetime)*TICRATE + tp.tv_usec*TICRATE/1000000;
     return newtics;
+#endif
+    return 0;
 }
 
 
@@ -115,12 +105,13 @@ void I_Init (void)
 //
 void I_Quit (void)
 {
-    D_QuitNetGame ();
-    I_ShutdownSound();
-    I_ShutdownMusic();
-    M_SaveDefaults ();
-    I_ShutdownGraphics();
-    exit(0);
+    // no quitting on consoles!
+    //D_QuitNetGame ();
+    //I_ShutdownSound();
+    //I_ShutdownMusic();
+    //M_SaveDefaults ();
+    //I_ShutdownGraphics();
+    //exit(0);
 }
 
 void I_WaitVBL(int count)
@@ -131,7 +122,9 @@ void I_WaitVBL(int count)
 #ifdef SUN
     sleep(0);
 #else
-    usleep (count * (1000000/70) );                                
+    // AJTODO Figure out saturn sleep
+    count++;
+    //usleep (count * (1000000/70) );                                    
 #endif
 #endif
 }
@@ -161,6 +154,9 @@ extern boolean demorecording;
 
 void I_Error (char *error, ...)
 {
+    // AJTODO Do something here?
+    error++;
+#if 0
     va_list	argptr;
 
     // Message first.
@@ -180,4 +176,5 @@ void I_Error (char *error, ...)
     I_ShutdownGraphics();
     
     exit(-1);
+#endif
 }

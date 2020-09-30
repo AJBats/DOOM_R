@@ -21,10 +21,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: s_sound.c,v 1.6 1997/02/03 22:45:12 b1 Exp $";
-
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -146,8 +142,7 @@ S_AdjustSoundParams
 ( mobj_t*	listener,
   mobj_t*	source,
   int*		vol,
-  int*		sep,
-  int*		pitch );
+  int*		sep);
 
 void S_StopChannel(int cnum);
 
@@ -164,7 +159,7 @@ void S_Init
 {  
   int		i;
 
-  fprintf( stderr, "S_Init: default sfx volume %d\n", sfxVolume);
+  //fprintf( stderr, "S_Init: default sfx volume %d\n", sfxVolume);
 
   // Whatever these did with DMX, these are rather dummies now.
   I_SetChannels();
@@ -306,8 +301,7 @@ S_StartSoundAtVolume
     rc = S_AdjustSoundParams(players[consoleplayer].mo,
 			     origin,
 			     &volume,
-			     &sep,
-			     &pitch);
+			     &sep);
 	
     if ( origin->x == players[consoleplayer].mo->x
 	 && origin->y == players[consoleplayer].mo->y)
@@ -368,8 +362,8 @@ S_StartSoundAtVolume
   // cache data if necessary
   if (!sfx->data)
   {
-    fprintf( stderr,
-	     "S_StartSoundAtVolume: 16bit and not pre-cached - wtf?\n");
+    //fprintf( stderr,
+	//     "S_StartSoundAtVolume: 16bit and not pre-cached - wtf?\n");
 
     // DOS remains, 8bit handling
     //sfx->data = (void *) W_CacheLumpNum(sfx->lumpnum, PU_MUSIC);
@@ -586,8 +580,7 @@ void S_UpdateSounds(void* listener_p)
 		    audible = S_AdjustSoundParams(listener,
 						  c->origin,
 						  &volume,
-						  &sep,
-						  &pitch);
+						  &sep);
 		    
 		    if (!audible)
 		    {
@@ -658,8 +651,9 @@ S_ChangeMusic
 	 || (musicnum >= NUMMUSIC) )
     {
 	I_Error("Bad music number %d", musicnum);
+    abort();
     }
-    else
+    
 	music = &S_music[musicnum];
 
     if (mus_playing == music)
@@ -754,8 +748,7 @@ S_AdjustSoundParams
 ( mobj_t*	listener,
   mobj_t*	source,
   int*		vol,
-  int*		sep,
-  int*		pitch )
+  int*		sep )
 {
     fixed_t	approx_dist;
     fixed_t	adx;

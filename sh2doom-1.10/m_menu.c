@@ -22,13 +22,10 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
-
-#include <unistd.h>
+//#include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+//#include <sys/stat.h>
+//#include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -63,7 +60,8 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include "m_menu.h"
 
-
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 
 extern patch_t*		hu_font[HU_FONTSIZE];
 extern boolean		message_dontfuckwithme;
@@ -355,9 +353,9 @@ menuitem_t OptionsMenu[]=
     {1,"M_MESSG",	M_ChangeMessages,'m'},
     {1,"M_DETAIL",	M_ChangeDetail,'g'},
     {2,"M_SCRNSZ",	M_SizeDisplay,'s'},
-    {-1,"",0},
+    {-1,"",0,0},
     {2,"M_MSENS",	M_ChangeSensitivity,'m'},
-    {-1,"",0},
+    {-1,"",0,0},
     {1,"M_SVOL",	M_Sound,'s'}
 };
 
@@ -431,9 +429,9 @@ enum
 menuitem_t SoundMenu[]=
 {
     {2,"M_SFXVOL",M_SfxVol,'s'},
-    {-1,"",0},
+    {-1,"",0,0},
     {2,"M_MUSVOL",M_MusicVol,'m'},
-    {-1,"",0}
+    {-1,"",0,0}
 };
 
 menu_t  SoundDef =
@@ -510,6 +508,8 @@ menu_t  SaveDef =
 //
 void M_ReadSaveStrings(void)
 {
+    // AJTODO re-implement
+#if 0
     int             handle;
     int             count;
     int             i;
@@ -533,6 +533,7 @@ void M_ReadSaveStrings(void)
 	close (handle);
 	LoadMenu[i].status = 1;
     }
+#endif
 }
 
 
@@ -591,6 +592,7 @@ void M_LoadSelect(int choice)
 //
 // Selected from DOOM menu
 //
+
 void M_LoadGame (int choice)
 {
     if (netgame)
@@ -602,7 +604,6 @@ void M_LoadGame (int choice)
     M_SetupNextMenu(&LoadDef);
     M_ReadSaveStrings();
 }
-
 
 //
 //  M_SaveGame & Cie.
@@ -930,8 +931,8 @@ void M_Episode(int choice)
     if ( (gamemode == registered)
 	 && (choice > 2))
     {
-      fprintf( stderr,
-	       "M_Episode: 4th episode requires UltimateDOOM\n");
+      //fprintf( stderr,
+	  //     "M_Episode: 4th episode requires UltimateDOOM\n");
       choice = 0;
     }
 	 
@@ -1134,7 +1135,7 @@ void M_ChangeDetail(int choice)
     detailLevel = 1 - detailLevel;
 
     // FIXME - does not work. Remove anyway?
-    fprintf( stderr, "M_ChangeDetail: low detail mode n.a.\n");
+    //fprintf( stderr, "M_ChangeDetail: low detail mode n.a.\n");
 
     return;
     
@@ -1258,7 +1259,7 @@ int M_StringWidth(char* string)
     int             w = 0;
     int             c;
 	
-    for (i = 0;i < strlen(string);i++)
+    for (i = 0;i < (int)strlen(string);i++)
     {
 	c = toupper(string[i]) - HU_FONTSTART;
 	if (c < 0 || c >= HU_FONTSIZE)
@@ -1282,7 +1283,7 @@ int M_StringHeight(char* string)
     int             height = SHORT(hu_font[0]->height);
 	
     h = height;
-    for (i = 0;i < strlen(string);i++)
+    for (i = 0;i < (int)strlen(string);i++)
 	if (string[i] == '\n')
 	    h += height;
 		
@@ -1756,7 +1757,7 @@ void M_Drawer (void)
 	y = 100 - M_StringHeight(messageString)/2;
 	while(*(messageString+start))
 	{
-	    for (i = 0;i < strlen(messageString+start);i++)
+	    for (i = 0;i < (int)strlen(messageString+start);i++)
 		if (*(messageString+start+i) == '\n')
 		{
 		    memset(string,0,40);
@@ -1765,7 +1766,7 @@ void M_Drawer (void)
 		    break;
 		}
 				
-	    if (i == strlen(messageString+start))
+	    if (i == (int)strlen(messageString+start))
 	    {
 		strcpy(string,messageString+start);
 		start += i;
@@ -1890,4 +1891,7 @@ void M_Init (void)
     }
     
 }
+
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 

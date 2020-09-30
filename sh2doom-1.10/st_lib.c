@@ -21,10 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-
-static const char
-rcsid[] = "$Id: st_lib.c,v 1.4 1997/02/03 16:47:56 b1 Exp $";
-
 #include <ctype.h>
 
 #include "doomdef.h"
@@ -81,7 +77,7 @@ STlib_initNum
     n->p	= pl;
 }
 
-
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 // 
 // A fairly efficient way to draw a number
 //  based on differences from the old number.
@@ -146,7 +142,7 @@ STlib_drawNum
     if (neg)
 	V_DrawPatch(x - 8, n->y, FG, sttminus);
 }
-
+#pragma GCC diagnostic pop // "-Wunused-parameter"
 
 //
 void
@@ -271,7 +267,7 @@ STlib_updateBinIcon
     int			h;
 
     if (*bi->on
-	&& (bi->oldval != *bi->val || refresh))
+	&& (bi->oldval != (int)*bi->val || refresh))
     {
 	x = bi->x - SHORT(bi->p->leftoffset);
 	y = bi->y - SHORT(bi->p->topoffset);

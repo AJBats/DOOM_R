@@ -24,14 +24,11 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
-
-#include <sys/stat.h>
+//#include <sys/stat.h>
 #include <sys/types.h>
-#include <fcntl.h>
+//#include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include <ctype.h>
 
@@ -102,6 +99,7 @@ M_DrawText
 
 
 
+#if 0
 //
 // M_WriteFile
 //
@@ -115,6 +113,7 @@ M_WriteFile
   void*		source,
   int		length )
 {
+
     int		handle;
     int		count;
 	
@@ -131,8 +130,9 @@ M_WriteFile
 		
     return true;
 }
+#endif
 
-
+#if 0
 //
 // M_ReadFile
 //
@@ -161,6 +161,7 @@ M_ReadFile
     *buffer = buf;
     return length;
 }
+#endif
 
 
 //
@@ -233,10 +234,10 @@ typedef struct
 
 default_t	defaults[] =
 {
-    {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&snd_SfxVolume, 8},
-    {"music_volume",&snd_MusicVolume, 8},
-    {"show_messages",&showMessages, 1},
+    {"mouse_sensitivity",&mouseSensitivity, 5, 0, 0},
+    {"sfx_volume",&snd_SfxVolume, 8, 0, 0},
+    {"music_volume",&snd_MusicVolume, 8, 0, 0},
+    {"show_messages",&showMessages, 1, 0, 0},
     
 
 #ifdef NORMALUNIX
@@ -265,36 +266,36 @@ default_t	defaults[] =
     {"mousetype", (int*)&mousetype, (int)"microsoft"},
 #endif
 
-    {"use_mouse",&usemouse, 1},
-    {"mouseb_fire",&mousebfire,0},
-    {"mouseb_strafe",&mousebstrafe,1},
-    {"mouseb_forward",&mousebforward,2},
+    {"use_mouse",&usemouse, 1, 0, 0},
+    {"mouseb_fire",&mousebfire,0, 0, 0},
+    {"mouseb_strafe",&mousebstrafe,1, 0, 0},
+    {"mouseb_forward",&mousebforward,2, 0, 0},
 
-    {"use_joystick",&usejoystick, 0},
-    {"joyb_fire",&joybfire,0},
-    {"joyb_strafe",&joybstrafe,1},
-    {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,2},
+    {"use_joystick",&usejoystick, 0, 0, 0},
+    {"joyb_fire",&joybfire,0, 0, 0},
+    {"joyb_strafe",&joybstrafe,1, 0, 0},
+    {"joyb_use",&joybuse,3, 0, 0},
+    {"joyb_speed",&joybspeed,2, 0, 0},
 
-    {"screenblocks",&screenblocks, 9},
-    {"detaillevel",&detailLevel, 0},
+    {"screenblocks",&screenblocks, 9, 0, 0},
+    {"detaillevel",&detailLevel, 0, 0, 0},
 
-    {"snd_channels",&numChannels, 3},
+    {"snd_channels",&numChannels, 3, 0, 0},
 
 
 
-    {"usegamma",&usegamma, 0},
+    {"usegamma",&usegamma, 0, 0, 0},
 
-    {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
-    {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
-    {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
-    {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3 },
-    {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4 },
-    {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5 },
-    {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6 },
-    {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
-    {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
-    {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 }
+    {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0, 0, 0 },
+    {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1, 0, 0 },
+    {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2, 0, 0 },
+    {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3, 0, 0 },
+    {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4, 0, 0 },
+    {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5, 0, 0 },
+    {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6, 0, 0 },
+    {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7, 0, 0 },
+    {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8, 0, 0 },
+    {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9, 0, 0 }
 
 };
 
@@ -339,6 +340,8 @@ extern byte	scantokey[128];
 
 void M_LoadDefaults (void)
 {
+    // AJTODO Figure out what the defaults should be and load 'em up.
+#if 0
     int		i;
     int		len;
     FILE*	f;
@@ -400,6 +403,7 @@ void M_LoadDefaults (void)
 		
 	fclose (f);
     }
+#endif
 }
 
 
@@ -435,6 +439,7 @@ typedef struct
 } pcx_t;
 
 
+#if 0
 //
 // WritePCXfile
 //
@@ -495,8 +500,9 @@ WritePCXfile
 
     Z_Free (pcx);
 }
+#endif
 
-
+#if 0
 //
 // M_ScreenShot
 //
@@ -530,5 +536,5 @@ void M_ScreenShot (void)
 	
     players[consoleplayer].message = "screen shot";
 }
-
+#endif
 

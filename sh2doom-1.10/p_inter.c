@@ -22,10 +22,6 @@
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: p_inter.c,v 1.4 1997/02/03 22:45:11 b1 Exp $";
-
-
 // Data.
 #include "doomdef.h"
 #include "dstrings.h"
@@ -782,7 +778,6 @@ P_DamageMobj
     int		saved;
     player_t*	player;
     fixed_t	thrust;
-    int		temp;
 	
     if ( !(target->flags & MF_SHOOTABLE) )
 	return;	// shouldn't happen...
@@ -876,11 +871,6 @@ P_DamageMobj
 
 	if (player->damagecount > 100)
 	    player->damagecount = 100;	// teleport stomp does 10k points...
-	
-	temp = damage < 100 ? damage : 100;
-
-	if (player == &players[consoleplayer])
-	    I_Tactile (40,10,40+temp*2);
     }
     
     // do the damage	

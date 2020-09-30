@@ -22,22 +22,20 @@
 //-----------------------------------------------------------------------------
 
 
-static const char
-rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
-
-
 #ifdef NORMALUNIX
-#include <ctype.h>
-#include <sys/types.h>
-#include <string.h>
-#include <unistd.h>
 #include <malloc.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <alloca.h>
 #define O_BINARY		0
 #endif
 
+#include <ctype.h>
+#include <sys/types.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include <alloca.h>
 #include "doomtype.h"
 #include "m_swap.h"
 #include "i_system.h"
@@ -50,7 +48,8 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
 
 
-
+// AJTODO hardcode realloc prototype here for now
+extern void * __weak realloc(void *old, size_t new_len);
 
 
 //
@@ -64,7 +63,7 @@ int			numlumps;
 void**			lumpcache;
 
 
-#define strcmpi	strcasecmp
+#define strcmpi	strcasestr
 
 void strupr (char* s)
 {
@@ -73,12 +72,17 @@ void strupr (char* s)
 
 int filelength (int handle) 
 { 
+    // AJTODO handle file size. Probably just hardcode for each wad.
+    handle++;
+#if 0
     struct stat	fileinfo;
     
     if (fstat (handle,&fileinfo) == -1)
 	I_Error ("Error fstating");
 
     return fileinfo.st_size;
+#endif
+    return 0;
 }
 
 
@@ -159,14 +163,15 @@ void W_AddFile (char *filename)
 	reloadname = filename;
 	reloadlump = numlumps;
     }
-		
-    if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
-    {
-	printf (" couldn't open %s\n",filename);
-	return;
-    }
 
-    printf (" adding %s\n",filename);
+    // AJTODO translate this to reading wad on the CD rom	
+    //if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
+    //{
+	//printf (" couldn't open %s\n",filename);
+	//return;
+    //}
+
+    //printf (" adding %s\n",filename);
     startlump = numlumps;
 	
     if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
@@ -181,7 +186,8 @@ void W_AddFile (char *filename)
     else 
     {
 	// WAD file
-	read (handle, &header, sizeof(header));
+    // AJTODO translate this to reading wad on the CD rom	
+	//read (handle, &header, sizeof(header));
 	if (strncmp(header.identification,"IWAD",4))
 	{
 	    // Homebrew levels?
@@ -197,8 +203,9 @@ void W_AddFile (char *filename)
 	header.infotableofs = LONG(header.infotableofs);
 	length = header.numlumps*sizeof(filelump_t);
 	fileinfo = alloca (length);
-	lseek (handle, header.infotableofs, SEEK_SET);
-	read (handle, fileinfo, length);
+    // AJTODO translate this to reading wad on the CD rom	
+	//lseek (handle, header.infotableofs, SEEK_SET);
+	//read (handle, fileinfo, length);
 	numlumps += header.numlumps;
     }
 

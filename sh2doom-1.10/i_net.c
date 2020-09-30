@@ -20,9 +20,8 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
-
+// AJTODO implement netlink multiplayer
+#if 0
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -346,3 +345,4 @@ void I_NetCmd (void)
 	I_Error ("Bad net cmd: %i\n",doomcom->command);
 }
 
+#endif

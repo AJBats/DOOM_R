@@ -43,7 +43,6 @@ sh2doom-1.10/m_swap.o \
 sh2doom-1.10/m_cheat.o \
 sh2doom-1.10/m_fixed.o \
 sh2doom-1.10/m_menu.o \
-sh2doom-1.10/m_argv.o \
 sh2doom-1.10/m_bbox.o \
 sh2doom-1.10/i_video.o \
 sh2doom-1.10/info.o \

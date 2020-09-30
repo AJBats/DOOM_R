@@ -24,7 +24,7 @@ fclose(FILE* _Stream)
 {
     return 0;
 }
-#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop // "-Wunused-parameter"
 
 __END_DECLS
 

@@ -23,9 +23,6 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: p_enemy.c,v 1.5 1997/02/03 22:45:11 b1 Exp $";
-
 #include <stdlib.h>
 
 #include "m_random.h"
@@ -80,7 +77,7 @@ dirtype_t diags[] =
 
 
 
-
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 void A_Fall (mobj_t *actor);
 
@@ -400,7 +397,7 @@ void P_NewChaseDir (mobj_t*	actor)
 	&& d[2] != DI_NODIR)
     {
 	actor->movedir = diags[((deltay<0)<<1)+(deltax>0)];
-	if (actor->movedir != turnaround && P_TryWalk(actor))
+	if (actor->movedir != (int)turnaround && P_TryWalk(actor))
 	    return;
     }
 
@@ -453,7 +450,7 @@ void P_NewChaseDir (mobj_t*	actor)
 	      tdir<=DI_SOUTHEAST;
 	      tdir++ )
 	{
-	    if (tdir!=turnaround)
+	    if (tdir!=(int)turnaround)
 	    {
 		actor->movedir =tdir;
 		
@@ -468,7 +465,7 @@ void P_NewChaseDir (mobj_t*	actor)
 	      tdir != (DI_EAST-1);
 	      tdir-- )
 	{
-	    if (tdir!=turnaround)
+	    if (tdir!=(int)turnaround)
 	    {
 		actor->movedir =tdir;
 		
@@ -503,11 +500,8 @@ P_LookForPlayers
     int		c;
     int		stop;
     player_t*	player;
-    sector_t*	sector;
     angle_t	an;
     fixed_t	dist;
-		
-    sector = actor->subsector->sector;
 	
     c = 0;
     stop = (actor->lastlook-1)&3;
@@ -2006,3 +2000,5 @@ void A_PlayerScream (mobj_t* mo)
     
     S_StartSound (mo, sound);
 }
+
+#pragma GCC diagnostic pop // "-Wunused-parameter"

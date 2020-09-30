@@ -23,16 +23,14 @@
 //-----------------------------------------------------------------------------
 
 
-static const char 
-rcsid[] = "$Id: sounds.c,v 1.3 1997/01/29 22:40:44 b1 Exp $";
-
-
 #include "doomtype.h"
 #include "sounds.h"
 
 //
 // Information about all the music
 //
+
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
 musicinfo_t S_music[] =
 {
@@ -226,3 +224,4 @@ sfxinfo_t S_sfx[] =
   { "radio", false, 60, 0, -1, -1, 0 } 
 };
 
+#pragma GCC diagnostic pop // "-Wmissing-field-initializers"

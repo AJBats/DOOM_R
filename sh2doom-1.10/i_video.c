@@ -21,19 +21,16 @@
 //
 //-----------------------------------------------------------------------------
 
-static const char
-rcsid[] = "$Id: i_x.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
-
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
+//#include <unistd.h>
+//#include <sys/ipc.h>
+//#include <sys/shm.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/keysym.h>
+//#include <X11/Xlib.h>
+//#include <X11/Xutil.h>
+//#include <X11/keysym.h>
 
-#include <X11/extensions/XShm.h>
+//#include <X11/extensions/XShm.h>
 // Had to dig up XShm.c for this one.
 // It is in the libXext, but not in the XFree86 headers.
 #ifdef LINUX
@@ -41,13 +38,13 @@ int XShmGetEventBase( Display* dpy ); // problems with g++?
 #endif
 
 #include <stdarg.h>
-#include <sys/time.h>
+//#include <sys/time.h>
 #include <sys/types.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 
-#include <netinet/in.h>
-#include <errnos.h>
-#include <signal.h>
+//#include <netinet/in.h>
+//#include <errnos.h>
+//#include <signal.h>
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -59,6 +56,8 @@ int XShmGetEventBase( Display* dpy ); // problems with g++?
 
 #define POINTER_WARP_COUNTDOWN	1
 
+// AJTODO This looks like display device stuff.
+#if 0
 Display*	X_display=0;
 Window		X_mainWindow;
 Colormap	X_cmap;
@@ -70,12 +69,16 @@ XVisualInfo	X_visualinfo;
 XImage*		image;
 int		X_width;
 int		X_height;
+#endif
 
 // MIT SHared Memory extension.
 boolean		doShm;
 
+// AJTODO This looks like display device stuff.
+#if 0
 XShmSegmentInfo	X_shminfo;
 int		X_shmeventtype;
+#endif
 
 // Fake mouse handling.
 // This cannot work properly w/o DGA.
@@ -96,7 +99,9 @@ static int	multiply=1;
 
 int xlatekey(void)
 {
-
+	// AJTODO Re-implement. This looks like it's handling input events and translating it to
+	// doom recognized values.
+#if 0
     int rc;
 
     switch(rc = XKeycodeToKeysym(X_display, X_event.xkey.keycode, 0))
@@ -158,11 +163,14 @@ int xlatekey(void)
     }
 
     return rc;
-
+#endif
+	return 0;
 }
 
 void I_ShutdownGraphics(void)
 {
+	// AJTODO  There is no shutdown on saturn.
+#if 0
   // Detach from X server
   if (!XShmDetach(X_display, &X_shminfo))
 	    I_Error("XShmDetach() failed in I_ShutdownGraphics()");
@@ -173,6 +181,7 @@ void I_ShutdownGraphics(void)
 
   // Paranoia.
   image->data = NULL;
+#endif
 }
 
 
@@ -186,14 +195,15 @@ void I_StartFrame (void)
 
 }
 
-static int	lastmousex = 0;
-static int	lastmousey = 0;
+//static int	lastmousex = 0;
+//static int	lastmousey = 0;
 boolean		mousemoved = false;
 boolean		shmFinished;
 
 void I_GetEvent(void)
 {
-
+	// AJTODO event processing from the platform.
+#if 0
     event_t event;
 
     // put event-grabbing stuff in here
@@ -275,9 +285,11 @@ void I_GetEvent(void)
 	if (doShm && X_event.type == X_shmeventtype) shmFinished = true;
 	break;
     }
+#endif
 
 }
 
+#if 0
 Cursor
 createnullcursor
 ( Display*	display,
@@ -302,13 +314,15 @@ createnullcursor
     XFreeGC(display,gc);
     return cursor;
 }
+#endif
 
 //
 // I_StartTic
 //
 void I_StartTic (void)
 {
-
+	// AJTODO Re-implement this. But it looks platform specific. The comment here sounds like an oddity with X11.
+#if 0
     if (!X_display)
 	return;
 
@@ -334,7 +348,7 @@ void I_StartTic (void)
     }
 
     mousemoved = false;
-
+#endif
 }
 
 
@@ -385,7 +399,7 @@ void I_FinishUpdate (void)
 
 	ilineptr = (unsigned int *) (screens[0]);
 	for (i=0 ; i<2 ; i++)
-	    olineptrs[i] = (unsigned int *) &image->data[i*X_width];
+	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
 	y = SCREENHEIGHT;
 	while (y--)
@@ -412,8 +426,8 @@ void I_FinishUpdate (void)
 		*olineptrs[1]++ = twoopixels;
 #endif
 	    } while (x-=4);
-	    olineptrs[0] += X_width/4;
-	    olineptrs[1] += X_width/4;
+	    //olineptrs[0] += X_width/4; // AJTODO
+	    //olineptrs[1] += X_width/4;
 	}
 
     }
@@ -427,7 +441,7 @@ void I_FinishUpdate (void)
 
 	ilineptr = (unsigned int *) (screens[0]);
 	for (i=0 ; i<3 ; i++)
-	    olineptrs[i] = (unsigned int *) &image->data[i*X_width];
+	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
 	y = SCREENHEIGHT;
 	while (y--)
@@ -467,9 +481,9 @@ void I_FinishUpdate (void)
 		*olineptrs[2]++ = fouropixels[0];
 #endif
 	    } while (x-=4);
-	    olineptrs[0] += 2*X_width/4;
-	    olineptrs[1] += 2*X_width/4;
-	    olineptrs[2] += 2*X_width/4;
+	    //olineptrs[0] += 2*X_width/4; // AJTODO
+	    //olineptrs[1] += 2*X_width/4; // AJTODO
+	    //olineptrs[2] += 2*X_width/4; // AJTODO
 	}
 
     }
@@ -477,9 +491,11 @@ void I_FinishUpdate (void)
     {
 	// Broken. Gotta fix this some day.
 	void Expand4(unsigned *, double *);
-  	Expand4 ((unsigned *)(screens[0]), (double *) (image->data));
+  	//Expand4 ((unsigned *)(screens[0]), (double *) (image->data)); // AJTODO What is this doing?
     }
 
+	// AJTODO This looks like its drawing the frame to the display device.
+#if 0
     if (doShm)
     {
 
@@ -517,7 +533,7 @@ void I_FinishUpdate (void)
 	XSync(X_display, False);
 
     }
-
+#endif
 }
 
 
@@ -530,6 +546,8 @@ void I_ReadScreen (byte* scr)
 }
 
 
+// AJTODO palette stuff
+#if 0
 //
 // Palette stuff.
 //
@@ -583,8 +601,11 @@ void I_SetPalette (byte* palette)
 {
     UploadNewPalette(X_cmap, palette);
 }
+#endif
 
 
+// AJTODO shared memory. Probably wont come up.
+#if 0
 //
 // This function is probably redundant,
 //  if XShmDetach works properly.
@@ -688,7 +709,10 @@ void grabsharedmemory(int size)
   fprintf(stderr, "shared memory id=%d, addr=0x%x\n", id,
 	  (int) (image->data));
 }
+#endif
 
+// AJTODO init graphics. Important.
+#if 0
 void I_InitGraphics(void)
 {
 
@@ -913,6 +937,7 @@ void I_InitGraphics(void)
 	screens[0] = (unsigned char *) malloc (SCREENWIDTH * SCREENHEIGHT);
 
 }
+#endif
 
 
 unsigned	exptable[256];
