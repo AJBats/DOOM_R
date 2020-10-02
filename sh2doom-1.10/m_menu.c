@@ -48,7 +48,6 @@
 
 #include "g_game.h"
 
-#include "m_argv.h"
 #include "m_swap.h"
 
 #include "s_sound.h"
@@ -509,7 +508,7 @@ menu_t  SaveDef =
 void M_ReadSaveStrings(void)
 {
     // AJTODO re-implement
-#if 0
+#ifdef AJ_RM
     int             handle;
     int             count;
     int             i;
@@ -580,10 +579,12 @@ void M_DrawSaveLoadBorder(int x,int y)
 void M_LoadSelect(int choice)
 {
     char    name[256];
-	
+    // AJTODO this function will need human attention (maybe)
+#ifdef AJ_RM
     if (M_CheckParm("-cdrom"))
 	sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",choice);
     else
+#endif
 	sprintf(name,SAVEGAMENAME"%d.dsg",choice);
     G_LoadGame (name);
     M_ClearMenus ();

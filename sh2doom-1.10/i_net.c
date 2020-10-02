@@ -21,7 +21,7 @@
 //-----------------------------------------------------------------------------
 
 // AJTODO implement netlink multiplayer
-#if 0
+#ifdef AJ_RM
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

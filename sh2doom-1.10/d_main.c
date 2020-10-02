@@ -59,7 +59,6 @@
 #include "f_finale.h"
 #include "f_wipe.h"
 
-#include "m_argv.h"
 #include "m_misc.h"
 #include "m_menu.h"
 
@@ -360,6 +359,7 @@ void D_DoomLoop (void)
     if (demorecording)
 	G_BeginRecording ();
 		
+#ifdef AJ_RM
     if (M_CheckParm ("-debugfile"))
     {
 	char    filename[20];
@@ -367,6 +367,7 @@ void D_DoomLoop (void)
 	printf ("debug output to: %s\n",filename);
 	debugfile = fopen (filename,"w");
     }
+#endif
 	
     I_InitGraphics ();
 
@@ -567,7 +568,7 @@ void D_AddFile (char *file)
 void IdentifyVersion (void)
 {
 	// AJTODO this function will need to be rewritten	
-#if 0
+#ifdef AJ_RM
     char*	doom1wad;
     char*	doomwad;
     char*	doomuwad;
@@ -728,7 +729,7 @@ void IdentifyVersion (void)
 void FindResponseFile (void)
 {
 	// AJTODO rewrite this function... Also.. figure out what it's even doing????
-#if 0
+#ifdef AJ_RM
     int             i;
 #define MAXARGVS        100
 	
@@ -804,23 +805,14 @@ void FindResponseFile (void)
 //
 void D_DoomMain (void)
 {
-    int             p;
-    char                    file[256];
+    //int             p;
+    //char                    file[256];
 
     FindResponseFile ();
 	
     IdentifyVersion ();
 	
     modifiedgame = false;
-	
-    nomonsters = M_CheckParm ("-nomonsters");
-    respawnparm = M_CheckParm ("-respawn");
-    fastparm = M_CheckParm ("-fast");
-    devparm = M_CheckParm ("-devparm");
-    if (M_CheckParm ("-altdeath"))
-	deathmatch = 2;
-    else if (M_CheckParm ("-deathmatch"))
-	deathmatch = 1;
 
     switch ( gamemode )
     {
@@ -882,7 +874,9 @@ void D_DoomMain (void)
     if (devparm)
 	printf(D_DEVSTR);
     
-    // turbo option
+	// AJTODO What is this? It defaults to off
+    // turbo option	
+#ifdef AJ_RM
     if ( (p=M_CheckParm ("-turbo")) )
     {
 	int     scale = 200;
@@ -901,12 +895,15 @@ void D_DoomMain (void)
 	sidemove[0] = sidemove[0]*scale/100;
 	sidemove[1] = sidemove[1]*scale/100;
     }
+#endif
     
+
     // add any files specified on the command line with -file wadfile
     // to the wad list
     //
     // convenience hack to allow -wart e m to add a wad file
     // prepend a tilde to the filename so wadfile will be reloadable
+#ifdef AJ_RM
     p = M_CheckParm ("-wart");
     if (p)
     {
@@ -935,7 +932,10 @@ void D_DoomMain (void)
 	}
 	D_AddFile (file);
     }
-	
+#endif
+
+
+#ifdef AJ_RM
     p = M_CheckParm ("-file");
     if (p)
     {
@@ -945,7 +945,10 @@ void D_DoomMain (void)
 	while (++p != myargc && myargv[p][0] != '-')
 	    D_AddFile (myargv[p]);
     }
+#endif
 
+
+#ifdef AJ_RM
     p = M_CheckParm ("-playdemo");
 
     if (!p)
@@ -957,6 +960,7 @@ void D_DoomMain (void)
 	D_AddFile (file);
 	printf("Playing demo %s.lmp.\n",myargv[p+1]);
     }
+#endif
     
     // get skill / episode / map from parms
     startskill = sk_medium;
@@ -964,14 +968,17 @@ void D_DoomMain (void)
     startmap = 1;
     autostart = false;
 
-		
+#ifdef AJ_RM	
     p = M_CheckParm ("-skill");
     if (p && p < myargc-1)
     {
 	startskill = myargv[p+1][0]-'1';
 	autostart = true;
     }
+#endif
 
+
+#ifdef AJ_RM
     p = M_CheckParm ("-episode");
     if (p && p < myargc-1)
     {
@@ -979,7 +986,10 @@ void D_DoomMain (void)
 	startmap = 1;
 	autostart = true;
     }
+#endif
 	
+
+#ifdef AJ_RM
     p = M_CheckParm ("-timer");
     if (p && p < myargc-1 && deathmatch)
     {
@@ -990,11 +1000,15 @@ void D_DoomMain (void)
 	    printf("s");
 	printf(".\n");
     }
+#endif
 
+#ifdef AJ_RM
     p = M_CheckParm ("-avg");
     if (p && p < myargc-1 && deathmatch)
 	printf("Austin Virtual Gaming: Levels will end after 20 minutes\n");
+#endif
 
+#ifdef AJ_RM
     p = M_CheckParm ("-warp");
     if (p && p < myargc-1)
     {
@@ -1007,6 +1021,7 @@ void D_DoomMain (void)
 	}
 	autostart = true;
     }
+#endif
     
     // init subsystems
     printf ("V_Init: allocate screens.\n");
@@ -1114,6 +1129,7 @@ void D_DoomMain (void)
     printf ("ST_Init: Init status bar.\n");
     ST_Init ();
 
+#ifdef AJ_RM
     // check for a driver that wants intermission stats
     p = M_CheckParm ("-statcopy");
     if (p && p<myargc-1)
@@ -1124,7 +1140,9 @@ void D_DoomMain (void)
 	statcopy = (void*)atoi(myargv[p+1]);
 	printf ("External statistics registered.\n");
     }
-    
+#endif
+
+#ifdef AJ_RM    
     // start the apropriate game based on parms
     p = M_CheckParm ("-record");
 
@@ -1133,7 +1151,9 @@ void D_DoomMain (void)
 	G_RecordDemo (myargv[p+1]);
 	autostart = true;
     }
+#endif
 	
+#ifdef AJ_RM
     p = M_CheckParm ("-playdemo");
     if (p && p < myargc-1)
     {
@@ -1141,14 +1161,19 @@ void D_DoomMain (void)
 	G_DeferedPlayDemo (myargv[p+1]);
 	D_DoomLoop ();  // never returns
     }
+#endif
 	
+#ifdef AJ_RM
     p = M_CheckParm ("-timedemo");
     if (p && p < myargc-1)
     {
 	G_TimeDemo (myargv[p+1]);
 	D_DoomLoop ();  // never returns
     }
-	
+#endif
+
+
+#ifdef AJ_RM
     p = M_CheckParm ("-loadgame");
     if (p && p < myargc-1)
     {
@@ -1158,6 +1183,7 @@ void D_DoomMain (void)
 	    sprintf(file, SAVEGAMENAME"%c.dsg",myargv[p+1][0]);
 	G_LoadGame (file);
     }
+#endif
 	
 
     if ( gameaction != ga_loadgame )

@@ -23,17 +23,11 @@
 
 #include "doomdef.h"
 
-#include "m_argv.h"
 #include "d_main.h"
 
 int
-main
-( int		argc,
-  char**	argv ) 
-{ 
-    myargc = argc; 
-    myargv = argv; 
- 
+main() 
+{  
     D_DoomMain (); 
 
     return 0;

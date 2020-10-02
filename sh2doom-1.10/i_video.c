@@ -43,13 +43,12 @@ int XShmGetEventBase( Display* dpy ); // problems with g++?
 //#include <sys/socket.h>
 
 //#include <netinet/in.h>
-//#include <errnos.h>
+#include <errno.h>
 //#include <signal.h>
 
 #include "doomstat.h"
 #include "i_system.h"
 #include "v_video.h"
-#include "m_argv.h"
 #include "d_main.h"
 
 #include "doomdef.h"
@@ -57,7 +56,7 @@ int XShmGetEventBase( Display* dpy ); // problems with g++?
 #define POINTER_WARP_COUNTDOWN	1
 
 // AJTODO This looks like display device stuff.
-#if 0
+#ifdef AJ_RM
 Display*	X_display=0;
 Window		X_mainWindow;
 Colormap	X_cmap;
@@ -75,7 +74,7 @@ int		X_height;
 boolean		doShm;
 
 // AJTODO This looks like display device stuff.
-#if 0
+#ifdef AJ_RM
 XShmSegmentInfo	X_shminfo;
 int		X_shmeventtype;
 #endif
@@ -101,7 +100,7 @@ int xlatekey(void)
 {
 	// AJTODO Re-implement. This looks like it's handling input events and translating it to
 	// doom recognized values.
-#if 0
+#ifdef AJ_RM
     int rc;
 
     switch(rc = XKeycodeToKeysym(X_display, X_event.xkey.keycode, 0))
@@ -170,7 +169,7 @@ int xlatekey(void)
 void I_ShutdownGraphics(void)
 {
 	// AJTODO  There is no shutdown on saturn.
-#if 0
+#ifdef AJ_RM
   // Detach from X server
   if (!XShmDetach(X_display, &X_shminfo))
 	    I_Error("XShmDetach() failed in I_ShutdownGraphics()");
@@ -203,7 +202,7 @@ boolean		shmFinished;
 void I_GetEvent(void)
 {
 	// AJTODO event processing from the platform.
-#if 0
+#ifdef AJ_RM
     event_t event;
 
     // put event-grabbing stuff in here
@@ -289,7 +288,7 @@ void I_GetEvent(void)
 
 }
 
-#if 0
+#ifdef AJ_RM
 Cursor
 createnullcursor
 ( Display*	display,
@@ -322,7 +321,7 @@ createnullcursor
 void I_StartTic (void)
 {
 	// AJTODO Re-implement this. But it looks platform specific. The comment here sounds like an oddity with X11.
-#if 0
+#ifdef AJ_RM
     if (!X_display)
 	return;
 
@@ -495,7 +494,7 @@ void I_FinishUpdate (void)
     }
 
 	// AJTODO This looks like its drawing the frame to the display device.
-#if 0
+#ifdef AJ_RM
     if (doShm)
     {
 
@@ -547,7 +546,7 @@ void I_ReadScreen (byte* scr)
 
 
 // AJTODO palette stuff
-#if 0
+#ifdef AJ_RM
 //
 // Palette stuff.
 //
@@ -593,19 +592,24 @@ void UploadNewPalette(Colormap cmap, byte *palette)
 
 	}
 }
+#endif
 
 //
 // I_SetPalette
 //
 void I_SetPalette (byte* palette)
 {
+	// AJTODO palette stuff
+	palette++;
+#ifdef AJ_RM
     UploadNewPalette(X_cmap, palette);
-}
 #endif
+}
+
 
 
 // AJTODO shared memory. Probably wont come up.
-#if 0
+#ifdef AJ_RM
 //
 // This function is probably redundant,
 //  if XShmDetach works properly.
@@ -711,10 +715,11 @@ void grabsharedmemory(int size)
 }
 #endif
 
-// AJTODO init graphics. Important.
-#if 0
+
 void I_InitGraphics(void)
 {
+	// AJTODO init graphics. Important.
+#ifdef AJ_RM
 
     char*		displayname;
     char*		d;
@@ -935,9 +940,9 @@ void I_InitGraphics(void)
 	screens[0] = (unsigned char *) (image->data);
     else
 	screens[0] = (unsigned char *) malloc (SCREENWIDTH * SCREENHEIGHT);
-
-}
 #endif
+}
+
 
 
 unsigned	exptable[256];

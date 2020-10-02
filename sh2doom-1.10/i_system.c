@@ -74,7 +74,7 @@ byte* I_ZoneBase (int*	size)
 int  I_GetTime (void)
 {
     // AJTODO Reimplement
-#if 0
+#ifdef AJ_RM
     struct timeval	tp;
     struct timezone	tzp;
     int			newtics;
@@ -156,7 +156,7 @@ void I_Error (char *error, ...)
 {
     // AJTODO Do something here?
     error++;
-#if 0
+#ifdef AJ_RM
     va_list	argptr;
 
     // Message first.

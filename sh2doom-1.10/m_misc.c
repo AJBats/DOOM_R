@@ -38,7 +38,6 @@
 #include "z_zone.h"
 
 #include "m_swap.h"
-#include "m_argv.h"
 
 #include "w_wad.h"
 
@@ -99,7 +98,7 @@ M_DrawText
 
 
 
-#if 0
+#ifdef AJ_RM
 //
 // M_WriteFile
 //
@@ -132,7 +131,7 @@ M_WriteFile
 }
 #endif
 
-#if 0
+#ifdef AJ_RM
 //
 // M_ReadFile
 //
@@ -341,7 +340,7 @@ extern byte	scantokey[128];
 void M_LoadDefaults (void)
 {
     // AJTODO Figure out what the defaults should be and load 'em up.
-#if 0
+#ifdef AJ_RM
     int		i;
     int		len;
     FILE*	f;
@@ -439,7 +438,7 @@ typedef struct
 } pcx_t;
 
 
-#if 0
+#ifdef AJ_RM
 //
 // WritePCXfile
 //
@@ -502,7 +501,7 @@ WritePCXfile
 }
 #endif
 
-#if 0
+#ifdef AJ_RM
 //
 // M_ScreenShot
 //

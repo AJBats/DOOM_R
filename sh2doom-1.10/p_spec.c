@@ -32,7 +32,6 @@
 
 #include "i_system.h"
 #include "z_zone.h"
-#include "m_argv.h"
 #include "m_random.h"
 #include "w_wad.h"
 
@@ -1245,6 +1244,7 @@ void P_SpawnSpecials (void)
     // See if -TIMER needs to be used.
     levelTimer = false;
 	
+#ifdef AJ_RM
     i = M_CheckParm("-avg");
     if (i && deathmatch)
     {
@@ -1260,7 +1260,8 @@ void P_SpawnSpecials (void)
 	levelTimer = true;
 	levelTimeCount = time;
     }
-    
+#endif
+
     //	Init special SECTORs.
     sector = sectors;
     for (i=0 ; i<numsectors ; i++, sector++)

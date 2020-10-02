@@ -22,7 +22,6 @@
 //-----------------------------------------------------------------------------
 
 // AJTODO Implement sound
-#if 0
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,7 +51,6 @@
 
 #include "i_system.h"
 #include "i_sound.h"
-#include "m_argv.h"
 #include "m_misc.h"
 #include "w_wad.h"
 
@@ -78,10 +76,12 @@ void I_SoundDelTimer( void );
 #endif
 
 
+#ifdef AJ_RM
 // A quick hack to establish a protocol between
 // synchronous mix buffer updates and asynchronous
 // audio writes. Probably redundant with gametic.
 static int flag = 0;
+#endif
 
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
@@ -150,8 +150,9 @@ int		vol_lookup[128*256];
 int*		channelleftvol_lookup[NUM_CHANNELS];
 int*		channelrightvol_lookup[NUM_CHANNELS];
 
-
-
+// AJTODO work to remove this
+#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 //
 // Safe ioctl, convenience.
@@ -162,6 +163,7 @@ myioctl
   int	command,
   int*	arg )
 {   
+#ifdef AJ_RM
     int		rc;
     extern int	errno;
     
@@ -172,6 +174,7 @@ myioctl
 	fprintf(stderr, "errno=%d\n", errno);
 	exit(-1);
     }
+#endif
 }
 
 
@@ -187,6 +190,7 @@ getsfx
 ( char*         sfxname,
   int*          len )
 {
+#ifdef AJ_RM  
     unsigned char*      sfx;
     unsigned char*      paddedsfx;
     int                 i;
@@ -248,6 +252,8 @@ getsfx
 
     // Return allocated padded data.
     return (void *) (paddedsfx + 8);
+#endif
+    return NULL;
 }
 
 
@@ -268,6 +274,7 @@ addsfx
   int		step,
   int		seperation )
 {
+#ifdef AJ_RM
     static unsigned short	handlenums = 0;
  
     int		i;
@@ -378,6 +385,8 @@ addsfx
 
     // You tell me.
     return rc;
+#endif
+  return 0;
 }
 
 
@@ -395,6 +404,7 @@ addsfx
 //
 void I_SetChannels()
 {
+#ifdef AJ_RM
   // Init internal lookups (raw data, mixing buffer, channels).
   // This function sets up internal lookups used during
   //  the mixing process. 
@@ -421,26 +431,31 @@ void I_SetChannels()
   for (i=0 ; i<128 ; i++)
     for (j=0 ; j<256 ; j++)
       vol_lookup[i*256+j] = (i*(j-128)*256)/127;
+#endif
 }	
 
  
 void I_SetSfxVolume(int volume)
 {
+#ifdef AJ_RM
   // Identical to DOS.
   // Basically, this should propagate
   //  the menu/config file setting
   //  to the state variable used in
   //  the mixing.
   snd_SfxVolume = volume;
+#endif
 }
 
 // MUSIC API - dummy. Some code from DOS version.
 void I_SetMusicVolume(int volume)
 {
+#ifdef AJ_RM
   // Internal state variable.
   snd_MusicVolume = volume;
   // Now set volume on output device.
   // Whatever( snd_MusciVolume );
+#endif
 }
 
 
@@ -450,9 +465,12 @@ void I_SetMusicVolume(int volume)
 //
 int I_GetSfxLumpNum(sfxinfo_t* sfx)
 {
+#ifdef AJ_RM
     char namebuf[9];
     sprintf(namebuf, "ds%s", sfx->name);
     return W_GetNumForName(namebuf);
+#endif
+  return 0;
 }
 
 //
@@ -475,6 +493,7 @@ I_StartSound
   int		pitch,
   int		priority )
 {
+#ifdef AJ_RM
 
   // UNUSED
   priority = 0;
@@ -498,12 +517,16 @@ I_StartSound
     
     return id;
 #endif
+
+#endif
+  return 0;
 }
 
 
 
 void I_StopSound (int handle)
 {
+#ifdef AJ_RM
   // You need the handle returned by StartSound.
   // Would be looping all channels,
   //  tracking down the handle,
@@ -511,13 +534,17 @@ void I_StopSound (int handle)
   
   // UNUSED.
   handle = 0;
+#endif
 }
 
 
 int I_SoundIsPlaying(int handle)
 {
+#ifdef AJ_RM
     // Ouch.
     return gametic < handle;
+#endif
+  return 0;
 }
 
 
@@ -538,6 +565,8 @@ int I_SoundIsPlaying(int handle)
 //
 void I_UpdateSound( void )
 {
+#ifdef AJ_RM
+
 #ifdef SNDINTR
   // Debug. Count buffer misses with interrupt.
   static int misses = 0;
@@ -651,6 +680,8 @@ void I_UpdateSound( void )
     // Increment flag for update.
     flag++;
 #endif
+
+#endif
 }
 
 
@@ -665,8 +696,10 @@ void I_UpdateSound( void )
 void
 I_SubmitSound(void)
 {
+#ifdef AJ_RM
   // Write it to DSP device.
   write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
+#endif
 }
 
 
@@ -678,6 +711,7 @@ I_UpdateSoundParams
   int	sep,
   int	pitch)
 {
+#ifdef AJ_RM
   // I fail too see that this is used.
   // Would be using the handle to identify
   //  on which channel the sound might be active,
@@ -685,6 +719,7 @@ I_UpdateSoundParams
 
   // UNUSED.
   handle = vol = sep = pitch = 0;
+#endif
 }
 
 
@@ -692,6 +727,8 @@ I_UpdateSoundParams
 
 void I_ShutdownSound(void)
 {    
+#ifdef AJ_RM
+
 #ifdef SNDSERV
   if (sndserver)
   {
@@ -727,6 +764,8 @@ void I_ShutdownSound(void)
 
   // Done.
   return;
+
+#endif
 }
 
 
@@ -737,6 +776,8 @@ void I_ShutdownSound(void)
 void
 I_InitSound()
 { 
+#ifdef AJ_RM
+
 #ifdef SNDSERV
   char buffer[256];
   
@@ -822,6 +863,8 @@ I_InitSound()
   fprintf(stderr, "I_InitSound: sound module ready\n");
     
 #endif
+
+#endif
 }
 
 
@@ -905,6 +948,8 @@ int I_QrySongPlaying(int handle)
 #endif
 
 
+// AJTODO re-implement this part
+#ifdef AJ_RM
 // We might use SIGVTALRM and ITIMER_VIRTUAL, if the process
 //  time independend timer happens to get lost due to heavy load.
 // SIGALRM and ITIMER_REAL doesn't really work well.
@@ -912,10 +957,12 @@ int I_QrySongPlaying(int handle)
 static int /*__itimer_which*/  itimer = ITIMER_REAL;
 
 static int sig = SIGALRM;
+#endif
 
 // Interrupt handler.
 void I_HandleSoundTimer( int ignore )
 {
+#ifdef AJ_RM
   // Debug.
   //fprintf( stderr, "%c", '+' ); fflush( stderr );
   
@@ -935,11 +982,13 @@ void I_HandleSoundTimer( int ignore )
   // UNUSED, but required.
   ignore = 0;
   return;
+#endif
 }
 
 // Get the interrupt. Set duration in millisecs.
 int I_SoundSetTimer( int duration_of_tick )
 {
+#ifdef AJ_RM
   // Needed for gametick clockwork.
   struct itimerval    value;
   struct itimerval    ovalue;
@@ -973,15 +1022,20 @@ int I_SoundSetTimer( int duration_of_tick )
     fprintf( stderr, "I_SoundSetTimer: interrupt n.a.\n");
   
   return res;
+#endif
+  return 0;
 }
 
 
 // Remove the interrupt. Set duration to zero.
 void I_SoundDelTimer()
 {
+#ifdef AJ_RM
   // Debug.
   if ( I_SoundSetTimer( 0 ) == -1)
     fprintf( stderr, "I_SoundDelTimer: failed to remove interrupt. Doh!\n");
+#endif
 }
 
-#endif
+#pragma GCC diagnostic pop // "-Wunused-parameter"
+#pragma GCC diagnostic pop // "-Wunused-but-set-parameter"

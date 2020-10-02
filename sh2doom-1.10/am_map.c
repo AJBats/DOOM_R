@@ -987,7 +987,7 @@ AM_drawFline
     register int ay;
     register int d;
 
-#if 0
+#ifdef AJ_RM
     static int fuck = 0;
 
     // For debugging only

@@ -74,7 +74,7 @@ int filelength (int handle)
 { 
     // AJTODO handle file size. Probably just hardcode for each wad.
     handle++;
-#if 0
+#ifdef AJ_RM
     struct stat	fileinfo;
     
     if (fstat (handle,&fileinfo) == -1)
@@ -144,9 +144,11 @@ char*			reloadname;
 
 void W_AddFile (char *filename)
 {
+    // AJTODO translate this to reading wad on the CD rom	
+
     wadinfo_t		header;
     lumpinfo_t*		lump_p;
-    unsigned		i;
+    int		i;
     int			handle;
     int			length;
     int			startlump;
@@ -164,7 +166,6 @@ void W_AddFile (char *filename)
 	reloadlump = numlumps;
     }
 
-    // AJTODO translate this to reading wad on the CD rom	
     //if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
     //{
 	//printf (" couldn't open %s\n",filename);
@@ -185,8 +186,7 @@ void W_AddFile (char *filename)
     }
     else 
     {
-	// WAD file
-    // AJTODO translate this to reading wad on the CD rom	
+	// WAD file    
 	//read (handle, &header, sizeof(header));
 	if (strncmp(header.identification,"IWAD",4))
 	{
@@ -203,7 +203,6 @@ void W_AddFile (char *filename)
 	header.infotableofs = LONG(header.infotableofs);
 	length = header.numlumps*sizeof(filelump_t);
 	fileinfo = alloca (length);
-    // AJTODO translate this to reading wad on the CD rom	
 	//lseek (handle, header.infotableofs, SEEK_SET);
 	//read (handle, fileinfo, length);
 	numlumps += header.numlumps;
@@ -227,9 +226,9 @@ void W_AddFile (char *filename)
 	lump_p->size = LONG(fileinfo->size);
 	strncpy (lump_p->name, fileinfo->name, 8);
     }
-	
-    if (reloadname)
-	close (handle);
+
+    //if (reloadname)
+	//    close (handle);
 }
 
 
@@ -242,27 +241,30 @@ void W_AddFile (char *filename)
 //
 void W_Reload (void)
 {
+    // AJTODO translate this to reading wad on the CD rom		
+
     wadinfo_t		header;
     int			lumpcount;
     lumpinfo_t*		lump_p;
-    unsigned		i;
-    int			handle;
+    int 		i;
+    //int			handle;
     int			length;
     filelump_t*		fileinfo;
 	
     if (!reloadname)
 	return;
-		
-    if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
+    
+    //if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
 	I_Error ("W_Reload: couldn't open %s",reloadname);
 
-    read (handle, &header, sizeof(header));
+    //read (handle, &header, sizeof(header));
+    memset(&header, 0, sizeof(header)); // AJTODO this line is temp to silence compiler. Remove it after we are properly reading a wad.
     lumpcount = LONG(header.numlumps);
     header.infotableofs = LONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
     fileinfo = alloca (length);
-    lseek (handle, header.infotableofs, SEEK_SET);
-    read (handle, fileinfo, length);
+    //lseek (handle, header.infotableofs, SEEK_SET);
+    //read (handle, fileinfo, length);
     
     // Fill in lumpinfo
     lump_p = &lumpinfo[reloadlump];
@@ -278,7 +280,7 @@ void W_Reload (void)
 	lump_p->size = LONG(fileinfo->size);
     }
 	
-    close (handle);
+    //close (handle);
 }
 
 
@@ -430,6 +432,7 @@ int W_LumpLength (int lump)
 
 
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 //
 // W_ReadLump
 // Loads the lump into the given buffer,
@@ -440,9 +443,11 @@ W_ReadLump
 ( int		lump,
   void*		dest )
 {
+    // AJTODO translate this to reading wad on the CD rom	
+
     int		c;
     lumpinfo_t*	l;
-    int		handle;
+    //int		handle;
 	
     if (lump >= numlumps)
 	I_Error ("W_ReadLump: %i >= numlumps",lump);
@@ -454,24 +459,26 @@ W_ReadLump
     if (l->handle == -1)
     {
 	// reloadable file, so use open / read / close
-	if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
+	//if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
 	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
     }
     else
-	handle = l->handle;
+	//handle = l->handle;
 		
-    lseek (handle, l->position, SEEK_SET);
-    c = read (handle, dest, l->size);
+    //lseek (handle, l->position, SEEK_SET);
+    //c = read (handle, dest, l->size);
 
+    c = 0; // AJTODO silencing compiler. Remove when we actually implement this function.
     if (c < l->size)
 	I_Error ("W_ReadLump: only read %i of %i on lump %i",
 		 c,l->size,lump);	
 
-    if (l->handle == -1)
-	close (handle);
+    //if (l->handle == -1)
+	//close (handle);
 		
     // ??? I_EndRead ();
 }
+#pragma GCC diagnostic pop // "-Wunused-parameter"
 
 
 
@@ -484,9 +491,7 @@ W_CacheLumpNum
 ( int		lump,
   int		tag )
 {
-    byte*	ptr;
-
-    if ((unsigned)lump >= numlumps)
+    if (lump >= numlumps)
 	I_Error ("W_CacheLumpNum: %i >= numlumps",lump);
 		
     if (!lumpcache[lump])
@@ -494,7 +499,7 @@ W_CacheLumpNum
 	// read the lump in
 	
 	//printf ("cache miss on lump %i\n",lump);
-	ptr = Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
+	Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
 	W_ReadLump (lump, lumpcache[lump]);
     }
     else

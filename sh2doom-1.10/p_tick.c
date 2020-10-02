@@ -83,7 +83,7 @@ void P_RemoveThinker (thinker_t* thinker)
 
 
 
-#if 0
+#ifdef AJ_RM
 //
 // P_AllocateThinker
 // Allocates memory and adds a new thinker at the end of the list.

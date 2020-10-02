@@ -28,7 +28,6 @@
 
 #include "z_zone.h"
 #include "f_finale.h"
-#include "m_argv.h"
 #include "m_misc.h"
 #include "m_menu.h"
 #include "m_random.h"
@@ -1276,10 +1275,11 @@ void G_DoSaveGame (void)
     int		length; 
     int		i; 
 	
-    if (M_CheckParm("-cdrom"))
-	sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",savegameslot);
-    else
-	sprintf (name,SAVEGAMENAME"%d.dsg",savegameslot); 
+    // AJTODO figure out save games
+    //if (M_CheckParm("-cdrom"))
+	//sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",savegameslot);
+    //else
+	//sprintf (name,SAVEGAMENAME"%d.dsg",savegameslot); 
     description = savedescription; 
 	 
     save_p = savebuffer = screens[1]+0x4000; 
@@ -1529,21 +1529,23 @@ void G_WriteDemoTiccmd (ticcmd_t* cmd)
 // G_RecordDemo 
 // 
 void G_RecordDemo (char* name) 
-{ 
-    int             i; 
-    int				maxsize;
-	
-    usergame = false; 
-    strcpy (demoname, name); 
-    strcat (demoname, ".lmp"); 
+{
+    //int i;
+    int maxsize;
+
+    usergame = false;
+    strcpy(demoname, name);
+    strcat(demoname, ".lmp");
     maxsize = 0x20000;
-    i = M_CheckParm ("-maxdemo");
-    if (i && i<myargc-1)
-	maxsize = atoi(myargv[i+1])*1024;
-    demobuffer = Z_Malloc (maxsize,PU_STATIC,NULL); 
+#ifdef AJ_RM
+    i = M_CheckParm("-maxdemo");
+    if (i && i < myargc - 1)
+        maxsize = atoi(myargv[i + 1]) * 1024;
+#endif
+    demobuffer = Z_Malloc(maxsize, PU_STATIC, NULL);
     demoend = demobuffer + maxsize;
-	
-    demorecording = true; 
+
+    demorecording = true;
 } 
  
  
@@ -1626,8 +1628,10 @@ void G_DoPlayDemo (void)
 //
 void G_TimeDemo (char* name) 
 { 	 
+#ifdef AJ_RM
     nodrawers = M_CheckParm ("-nodraw"); 
     noblit = M_CheckParm ("-noblit"); 
+#endif
     timingdemo = true; 
     singletics = true; 
 
