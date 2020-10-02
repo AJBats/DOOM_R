@@ -3,4 +3,5 @@
 *.o
 *.d
 *.vscode
+*.map
 compile_commands.json
