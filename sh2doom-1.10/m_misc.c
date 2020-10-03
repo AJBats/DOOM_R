@@ -98,7 +98,7 @@ M_DrawText
 
 
 
-#ifdef AJ_RM
+
 //
 // M_WriteFile
 //
@@ -106,12 +106,16 @@ M_DrawText
 #define O_BINARY 0
 #endif
 
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 boolean
 M_WriteFile
 ( char const*	name,
   void*		source,
   int		length )
 {
+    // AJTODO used for save game
+#ifdef AJ_RM
 
     int		handle;
     int		count;
@@ -128,18 +132,23 @@ M_WriteFile
 	return false;
 		
     return true;
-}
 #endif
+    return false;
+}
+#pragma GCC diagnostic pop // "-Wunused-parameter"
 
-#ifdef AJ_RM
+
+
 //
 // M_ReadFile
 //
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 int
 M_ReadFile
 ( char const*	name,
   byte**	buffer )
 {
+    #ifdef AJ_RM
     int	handle, count, length;
     struct stat	fileinfo;
     byte		*buf;
@@ -159,8 +168,11 @@ M_ReadFile
 		
     *buffer = buf;
     return length;
-}
 #endif
+    return 0;
+}
+#pragma GCC diagnostic pop // "-Wunused-parameter"
+
 
 
 //
@@ -501,12 +513,13 @@ WritePCXfile
 }
 #endif
 
-#ifdef AJ_RM
+
 //
 // M_ScreenShot
 //
 void M_ScreenShot (void)
 {
+    #ifdef AJ_RM
     int		i;
     byte*	linear;
     char	lbmname[12];
@@ -534,6 +547,7 @@ void M_ScreenShot (void)
 		  W_CacheLumpName ("PLAYPAL",PU_CACHE));
 	
     players[consoleplayer].message = "screen shot";
+    #endif
 }
-#endif
+
 

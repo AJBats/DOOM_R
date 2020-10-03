@@ -21,23 +21,22 @@
 //-----------------------------------------------------------------------------
 
 // AJTODO implement netlink multiplayer
-#ifdef AJ_RM
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
 #include <errno.h>
-#include <unistd.h>
-#include <netdb.h>
-#include <sys/ioctl.h>
+//#include <unistd.h>
+//#include <netdb.h>
+//#include <sys/ioctl.h>
 
 #include "i_system.h"
 #include "d_event.h"
 #include "d_net.h"
-#include "m_argv.h"
 
 #include "doomstat.h"
 
@@ -72,22 +71,28 @@ boolean NetListen (void);
 // NETWORKING
 //
 
+#ifdef AJ_RM
 int	DOOMPORT =	(IPPORT_USERRESERVED +0x1d );
+#endif
 
 int			sendsocket;
 int			insocket;
 
+#ifdef AJ_RM
 struct	sockaddr_in	sendaddress[MAXNETNODES];
+#endif
 
 void	(*netget) (void);
 void	(*netsend) (void);
 
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 //
 // UDPsocket
 //
 int UDPsocket (void)
 {
+#ifdef AJ_RM
     int	s;
 	
     // allocate a socket
@@ -96,6 +101,8 @@ int UDPsocket (void)
 	I_Error ("can't create socket: %s",strerror(errno));
 		
     return s;
+#endif
+    return 0;
 }
 
 //
@@ -106,6 +113,7 @@ BindToLocalPort
 ( int	s,
   int	port )
 {
+#ifdef AJ_RM
     int			v;
     struct sockaddr_in	address;
 	
@@ -117,6 +125,7 @@ BindToLocalPort
     v = bind (s, (void *)&address, sizeof(address));
     if (v == -1)
 	I_Error ("BindToPort: bind: %s", strerror(errno));
+#endif
 }
 
 
@@ -125,6 +134,7 @@ BindToLocalPort
 //
 void PacketSend (void)
 {
+#ifdef AJ_RM
     int		c;
     doomdata_t	sw;
 				
@@ -151,6 +161,7 @@ void PacketSend (void)
 	
     //	if (c == -1)
     //		I_Error ("SendPacket error: %s",strerror(errno));
+#endif
 }
 
 
@@ -159,6 +170,7 @@ void PacketSend (void)
 //
 void PacketGet (void)
 {
+#ifdef AJ_RM
     int			i;
     int			c;
     struct sockaddr_in	fromaddress;
@@ -214,12 +226,14 @@ void PacketGet (void)
 	netbuffer->cmds[c].chatchar = sw.cmds[c].chatchar;
 	netbuffer->cmds[c].buttons = sw.cmds[c].buttons;
     }
+#endif
 }
 
 
 
 int GetLocalAddress (void)
 {
+#ifdef AJ_RM
     char		hostname[1024];
     struct hostent*	hostentry;	// host information entry
     int			v;
@@ -233,7 +247,9 @@ int GetLocalAddress (void)
     if (!hostentry)
 	I_Error ("GetLocalAddress : gethostbyname: couldn't get local host");
 		
-    return *(int *)hostentry->h_addr_list[0];
+    return *(int *)hostentry->h_addr_list[0]
+#endif
+    return 0;
 }
 
 
@@ -242,6 +258,7 @@ int GetLocalAddress (void)
 //
 void I_InitNetwork (void)
 {
+#ifdef AJ_RM
     boolean		trueval = true;
     int			i;
     int			p;
@@ -328,11 +345,13 @@ void I_InitNetwork (void)
     ioctl (insocket, FIONBIO, &trueval);
 
     sendsocket = UDPsocket ();
+#endif
 }
 
 
 void I_NetCmd (void)
 {
+#ifdef AJ_RM
     if (doomcom->command == CMD_SEND)
     {
 	netsend ();
@@ -343,6 +362,7 @@ void I_NetCmd (void)
     }
     else
 	I_Error ("Bad net cmd: %i\n",doomcom->command);
+#endif
 }
 
-#endif
+#pragma GCC diagnostic pop // "-Wunused-parameter"

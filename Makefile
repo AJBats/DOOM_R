@@ -66,7 +66,8 @@ sh2doom-1.10/wi_stuff.o \
 sh2doom-1.10/z_zone.o \
 sh2doom-1.10/v_video.o \
 sh2doom-1.10/w_wad.o \
-sh2doom-1.10/st_stuff.o
+sh2doom-1.10/st_stuff.o \
+sh2doom-1.10/dummyfile.o
 
 SH_LIBRARIES:=
 SH_CFLAGS+= -O2 -I. -save-temps

@@ -2,6 +2,15 @@
 *.s
 *.o
 *.d
-*.vscode
+*.asm
+*.bin
+*.elf
+*.iso
+*.sym
 *.map
+*.cue
+ABS.TXT
+BIB.TXT
+CPY.TXT
+*.vscode
 compile_commands.json
