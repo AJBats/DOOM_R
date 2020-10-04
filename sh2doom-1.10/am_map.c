@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <yaul.h>
 #include <stdio.h>
 
 
@@ -85,10 +86,10 @@
 // drawing stuff
 #define	FB		0
 
-#define AM_PANDOWNKEY	KEY_DOWNARROW
-#define AM_PANUPKEY	KEY_UPARROW
-#define AM_PANRIGHTKEY	KEY_RIGHTARROW
-#define AM_PANLEFTKEY	KEY_LEFTARROW
+#define AM_PANDOWNKEY	KEY_DOWN_ARROW
+#define AM_PANUPKEY	KEY_UP_ARROW
+#define AM_PANRIGHTKEY	KEY_RIGHT_ARROW
+#define AM_PANLEFTKEY	KEY_LEFT_ARROW
 #define AM_ZOOMINKEY	'='
 #define AM_ZOOMOUTKEY	'-'
 #define AM_STARTKEY	KEY_TAB

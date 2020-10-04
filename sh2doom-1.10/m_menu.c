@@ -22,6 +22,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <yaul.h>
+
 //#include <unistd.h>
 #include <sys/types.h>
 //#include <sys/stat.h>
@@ -1365,23 +1367,23 @@ boolean M_Responder (event_t* ev)
     {
 	if (ev->data3 == -1)
 	{
-	    ch = KEY_UPARROW;
+	    ch = KEY_UP_ARROW;
 	    joywait = I_GetTime() + 5;
 	}
 	else if (ev->data3 == 1)
 	{
-	    ch = KEY_DOWNARROW;
+	    ch = KEY_DOWN_ARROW;
 	    joywait = I_GetTime() + 5;
 	}
 		
 	if (ev->data2 == -1)
 	{
-	    ch = KEY_LEFTARROW;
+	    ch = KEY_LEFT_ARROW;
 	    joywait = I_GetTime() + 2;
 	}
 	else if (ev->data2 == 1)
 	{
-	    ch = KEY_RIGHTARROW;
+	    ch = KEY_RIGHT_ARROW;
 	    joywait = I_GetTime() + 2;
 	}
 		
@@ -1403,13 +1405,13 @@ boolean M_Responder (event_t* ev)
 	    mousey += ev->data3;
 	    if (mousey < lasty-30)
 	    {
-		ch = KEY_DOWNARROW;
+		ch = KEY_DOWN_ARROW;
 		mousewait = I_GetTime() + 5;
 		mousey = lasty -= 30;
 	    }
 	    else if (mousey > lasty+30)
 	    {
-		ch = KEY_UPARROW;
+		ch = KEY_UP_ARROW;
 		mousewait = I_GetTime() + 5;
 		mousey = lasty += 30;
 	    }
@@ -1417,13 +1419,13 @@ boolean M_Responder (event_t* ev)
 	    mousex += ev->data2;
 	    if (mousex < lastx-30)
 	    {
-		ch = KEY_LEFTARROW;
+		ch = KEY_LEFT_ARROW;
 		mousewait = I_GetTime() + 5;
 		mousex = lastx -= 30;
 	    }
 	    else if (mousex > lastx+30)
 	    {
-		ch = KEY_RIGHTARROW;
+		ch = KEY_RIGHT_ARROW;
 		mousewait = I_GetTime() + 5;
 		mousex = lastx += 30;
 	    }
@@ -1528,7 +1530,7 @@ boolean M_Responder (event_t* ev)
 	    S_StartSound(NULL,sfx_stnmov);
 	    return true;
 				
-	  case KEY_EQUALS:        // Screen size up
+	  case KEY_EQUAL:        // Screen size up
 	    if (automapactive || chat_on)
 		return false;
 	    M_SizeDisplay(1);
@@ -1623,7 +1625,7 @@ boolean M_Responder (event_t* ev)
     // Keys usable within menu
     switch (ch)
     {
-      case KEY_DOWNARROW:
+      case KEY_DOWN_ARROW:
 	do
 	{
 	    if (itemOn+1 > currentMenu->numitems-1)
@@ -1633,7 +1635,7 @@ boolean M_Responder (event_t* ev)
 	} while(currentMenu->menuitems[itemOn].status==-1);
 	return true;
 		
-      case KEY_UPARROW:
+      case KEY_UP_ARROW:
 	do
 	{
 	    if (!itemOn)
@@ -1643,7 +1645,7 @@ boolean M_Responder (event_t* ev)
 	} while(currentMenu->menuitems[itemOn].status==-1);
 	return true;
 
-      case KEY_LEFTARROW:
+      case KEY_LEFT_ARROW:
 	if (currentMenu->menuitems[itemOn].routine &&
 	    currentMenu->menuitems[itemOn].status == 2)
 	{
@@ -1652,7 +1654,7 @@ boolean M_Responder (event_t* ev)
 	}
 	return true;
 		
-      case KEY_RIGHTARROW:
+      case KEY_RIGHT_ARROW:
 	if (currentMenu->menuitems[itemOn].routine &&
 	    currentMenu->menuitems[itemOn].status == 2)
 	{

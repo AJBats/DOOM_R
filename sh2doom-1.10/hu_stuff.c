@@ -20,6 +20,8 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <yaul.h>
+
 #include <ctype.h>
 
 #include "doomdef.h"
@@ -637,12 +639,12 @@ boolean HU_Responder(event_t *ev)
     for (i=0 ; i<MAXPLAYERS ; i++)
 	numplayers += playeringame[i];
 
-    if (ev->data1 == KEY_RSHIFT)
+    if (ev->data1 == KEY_RIGHT_SHIFT)
     {
 	shiftdown = ev->type == ev_keydown;
 	return false;
     }
-    else if (ev->data1 == KEY_RALT || ev->data1 == KEY_LALT)
+    else if (ev->data1 == KEY_RIGHT_ALT || ev->data1 == KEY_LEFT_ALT)
     {
 	altdown = ev->type == ev_keydown;
 	return false;

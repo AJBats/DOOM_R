@@ -28,6 +28,7 @@
 #define	BGCOLOR		7
 #define	FGCOLOR		8
 
+#include <yaul.h>
 
 #ifdef NORMALUNIX
 #include <stdio.h>

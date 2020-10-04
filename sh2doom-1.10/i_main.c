@@ -21,14 +21,43 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <yaul.h>
 #include "doomdef.h"
 
 #include "d_main.h"
 
-int
-main() 
+static void _hardware_init(void);
+
+int main() 
 {  
-    D_DoomMain (); 
+    _hardware_init();
+
+    dbgio_dev_default_init(DBGIO_DEV_VDP2_ASYNC);
+    dbgio_dev_font_load();
+    dbgio_dev_font_load_wait();
+
+    dbgio_puts("[1;1HHello Doom\n");
+
+    while (true) 
+    {
+        dbgio_flush();
+        vdp_sync();
+    }
+
+    //D_DoomMain (); 
 
     return 0;
 } 
+
+static void _hardware_init(void)
+{
+    vdp2_tvmd_display_res_set(VDP2_TVMD_INTERLACE_NONE, VDP2_TVMD_HORZ_NORMAL_A,
+        VDP2_TVMD_VERT_224);
+
+    vdp2_scrn_back_screen_color_set(VDP2_VRAM_ADDR(3, 0x01FFFE),
+        COLOR_RGB1555(1, 0, 3, 15));
+
+    cpu_intc_mask_set(0);
+
+    vdp2_tvmd_display_set();
+}

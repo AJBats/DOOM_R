@@ -241,7 +241,7 @@ typedef enum
 
 
 
-
+#ifdef AJ_RM
 //
 // DOOM keyboard definition.
 // This is the stuff configured by Setup.Exe.
@@ -278,6 +278,7 @@ typedef enum
 #define KEY_RALT	(0x80+0x38)
 
 #define KEY_LALT	KEY_RALT
+#endif
 
 
 
