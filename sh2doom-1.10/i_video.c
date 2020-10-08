@@ -946,7 +946,7 @@ void I_InitGraphics(void)
 }
 
 
-
+#ifdef AJ_RM
 unsigned	exptable[256];
 
 void InitExpand (void)
@@ -956,11 +956,13 @@ void InitExpand (void)
     for (i=0 ; i<256 ; i++)
 	exptable[i] = i | (i<<8) | (i<<16) | (i<<24);
 }
+#endif
 
-double		exptable2[256*256];
+//double		exptable2[256*256]; // AJTODO too big ons stack. find another way.
 
 void InitExpand2 (void)
 {
+#ifdef AJ_RM
     int		i;
     int		j;
     // UNUSED unsigned	iexp, jexp;
@@ -983,15 +985,19 @@ void InitExpand2 (void)
 	}
     }
     printf ("done.\n");
+#endif
 }
 
 int	inited;
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void
 Expand4
 ( unsigned*	lineptr,
   double*	xline )
 {
+	// AJTODO exptable2 is too large on stack. Figure out what this function is doing, and then find another way.
+#ifdef AJ_RM
     double	dpixel;
     unsigned	x;
     unsigned 	y;
@@ -1077,6 +1083,8 @@ Expand4
 	} while (x-=16);
 	xline += step;
     } while (y--);
+#endif
 }
 
 
+#pragma GCC diagnostic pop // "-Wunused-parameter"
