@@ -165,10 +165,10 @@ void 	P_MakeDivline (line_t* li, divline_t* dl);
 fixed_t P_InterceptVector (divline_t* v2, divline_t* v1);
 int 	P_BoxOnLineSide (fixed_t* tmbox, line_t* ld);
 
-extern fixed_t		opentop;
-extern fixed_t 		openbottom;
-extern fixed_t		openrange;
-extern fixed_t		lowfloor;
+extern fixed_t		gOpentop;
+extern fixed_t 		gOpenbottom;
+extern fixed_t		gOpenrange;
+extern fixed_t		gLowfloor;
 
 void 	P_LineOpening (line_t* linedef);
 

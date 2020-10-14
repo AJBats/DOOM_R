@@ -22,8 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include <math.h>
 
 #include "z_zone.h"

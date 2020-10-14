@@ -141,7 +141,9 @@ byte*	I_AllocLow(int length)
 {
     byte*	mem;
         
-    mem = (byte *)malloc (length);
+    // AJTODO did this work?
+    //mem = (byte *)malloc (length);
+    mem = jo_malloc_with_behaviour(length, JO_FAST_ALLOCATION);
     memset (mem,0,length);
     return mem;
 }

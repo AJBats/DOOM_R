@@ -21,8 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "doomdef.h"
 
 #include "m_bbox.h"
@@ -41,14 +40,14 @@
 
 
 
-seg_t*		curline;
-side_t*		sidedef;
-line_t*		linedef;
-sector_t*	frontsector;
-sector_t*	backsector;
+seg_t*		gCurline;
+side_t*		gSidedef;
+line_t*		gLinedef;
+sector_t*	gFrontsector;
+sector_t*	gBacksector;
 
-drawseg_t	drawsegs[MAXDRAWSEGS];
-drawseg_t*	ds_p;
+drawseg_t	gDrawsegs[MAXDRAWSEGS];
+drawseg_t*	gDs_p;
 
 
 void
@@ -64,7 +63,7 @@ R_StoreWallRange
 //
 void R_ClearDrawSegs (void)
 {
-    ds_p = drawsegs;
+    gDs_p = gDrawsegs;
 }
 
 
@@ -262,7 +261,7 @@ void R_AddLine (seg_t*	line)
     angle_t		span;
     angle_t		tspan;
     
-    curline = line;
+    gCurline = line;
 
     // OPTIMIZE: quickly reject orthogonal back sides.
     angle1 = R_PointToAngle (line->v1->x, line->v1->y);
@@ -314,20 +313,20 @@ void R_AddLine (seg_t*	line)
     if (x1 == x2)
 	return;				
 	
-    backsector = line->backsector;
+    gBacksector = line->backsector;
 
     // Single sided line?
-    if (!backsector)
+    if (!gBacksector)
 	goto clipsolid;		
 
     // Closed door.
-    if (backsector->ceilingheight <= frontsector->floorheight
-	|| backsector->floorheight >= frontsector->ceilingheight)
+    if (gBacksector->ceilingheight <= gFrontsector->floorheight
+	|| gBacksector->floorheight >= gFrontsector->ceilingheight)
 	goto clipsolid;		
 
     // Window.
-    if (backsector->ceilingheight != frontsector->ceilingheight
-	|| backsector->floorheight != frontsector->floorheight)
+    if (gBacksector->ceilingheight != gFrontsector->ceilingheight
+	|| gBacksector->floorheight != gFrontsector->floorheight)
 	goto clippass;	
 		
     // Reject empty lines used for triggers
@@ -335,10 +334,10 @@ void R_AddLine (seg_t*	line)
     // Identical floor and ceiling on both sides,
     // identical light levels on both sides,
     // and no middle texture.
-    if (backsector->ceilingpic == frontsector->ceilingpic
-	&& backsector->floorpic == frontsector->floorpic
-	&& backsector->lightlevel == frontsector->lightlevel
-	&& curline->sidedef->midtexture == 0)
+    if (gBacksector->ceilingpic == gFrontsector->ceilingpic
+	&& gBacksector->floorpic == gFrontsector->floorpic
+	&& gBacksector->lightlevel == gFrontsector->lightlevel
+	&& gCurline->sidedef->midtexture == 0)
     {
 	return;
     }
@@ -506,30 +505,30 @@ void R_Subsector (int num)
 
     sscount++;
     sub = &subsectors[num];
-    frontsector = sub->sector;
+    gFrontsector = sub->sector;
     count = sub->numlines;
     line = &segs[sub->firstline];
 
-    if (frontsector->floorheight < viewz)
+    if (gFrontsector->floorheight < viewz)
     {
-	floorplane = R_FindPlane (frontsector->floorheight,
-				  frontsector->floorpic,
-				  frontsector->lightlevel);
+	floorplane = R_FindPlane (gFrontsector->floorheight,
+				  gFrontsector->floorpic,
+				  gFrontsector->lightlevel);
     }
     else
 	floorplane = NULL;
     
-    if (frontsector->ceilingheight > viewz 
-	|| frontsector->ceilingpic == skyflatnum)
+    if (gFrontsector->ceilingheight > viewz 
+	|| gFrontsector->ceilingpic == skyflatnum)
     {
-	ceilingplane = R_FindPlane (frontsector->ceilingheight,
-				    frontsector->ceilingpic,
-				    frontsector->lightlevel);
+	ceilingplane = R_FindPlane (gFrontsector->ceilingheight,
+				    gFrontsector->ceilingpic,
+				    gFrontsector->lightlevel);
     }
     else
 	ceilingplane = NULL;
 		
-    R_AddSprites (frontsector);	
+    R_AddSprites (gFrontsector);	
 
     while (count--)
     {

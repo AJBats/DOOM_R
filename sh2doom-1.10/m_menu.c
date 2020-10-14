@@ -22,7 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
+#include <stdbool.h>
 
 //#include <unistd.h>
 #include <sys/types.h>
@@ -60,6 +60,8 @@
 #include "sounds.h"
 
 #include "m_menu.h"
+
+#include "dummyfile.h"
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"

@@ -20,8 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "z_zone.h"
 #include "doomdef.h"
 #include "p_local.h"
@@ -119,7 +118,7 @@ void T_VerticalDoor (vldoor_t* door)
 			  door->speed,
 			  door->sector->floorheight,
 			  false,1,door->direction);
-	if (res == pastdest)
+	if (res == res_pastdest)
 	{
 	    switch(door->type)
 	    {
@@ -146,7 +145,7 @@ void T_VerticalDoor (vldoor_t* door)
 		break;
 	    }
 	}
-	else if (res == crushed)
+	else if (res == res_crushed)
 	{
 	    switch(door->type)
 	    {
@@ -170,7 +169,7 @@ void T_VerticalDoor (vldoor_t* door)
 			  door->topheight,
 			  false,1,door->direction);
 	
-	if (res == pastdest)
+	if (res == res_pastdest)
 	{
 	    switch(door->type)
 	    {

@@ -20,8 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "z_zone.h"
 #include "doomdef.h"
 #include "p_local.h"
@@ -78,7 +77,7 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    }
 	}
 	
-	if (res == pastdest)
+	if (res == res_pastdest)
 	{
 	    switch(ceiling->type)
 	    {
@@ -119,7 +118,7 @@ void T_MoveCeiling (ceiling_t* ceiling)
 	    }
 	}
 	
-	if (res == pastdest)
+	if (res == res_pastdest)
 	{
 	    switch(ceiling->type)
 	    {
@@ -141,9 +140,9 @@ void T_MoveCeiling (ceiling_t* ceiling)
 		break;
 	    }
 	}
-	else // ( res != pastdest )
+	else // ( res != res_pastdest )
 	{
-	    if (res == crushed)
+	    if (res == res_crushed)
 	    {
 		switch(ceiling->type)
 		{

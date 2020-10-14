@@ -21,8 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "z_zone.h"
 #include "doomdef.h"
 #include "p_local.h"
@@ -72,9 +71,9 @@ T_MovePlane
 		{
 		    sector->floorheight =lastpos;
 		    P_ChangeSector(sector,crush);
-		    //return crushed;
+		    //return res_crushed;
 		}
-		return pastdest;
+		return res_pastdest;
 	    }
 	    else
 	    {
@@ -85,7 +84,7 @@ T_MovePlane
 		{
 		    sector->floorheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    return crushed;
+		    return res_crushed;
 		}
 	    }
 	    break;
@@ -101,9 +100,9 @@ T_MovePlane
 		{
 		    sector->floorheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    //return crushed;
+		    //return res_crushed;
 		}
-		return pastdest;
+		return res_pastdest;
 	    }
 	    else
 	    {
@@ -114,10 +113,10 @@ T_MovePlane
 		if (flag == true)
 		{
 		    if (crush == true)
-			return crushed;
+			return res_crushed;
 		    sector->floorheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    return crushed;
+		    return res_crushed;
 		}
 	    }
 	    break;
@@ -140,9 +139,9 @@ T_MovePlane
 		{
 		    sector->ceilingheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    //return crushed;
+		    //return res_crushed;
 		}
-		return pastdest;
+		return res_pastdest;
 	    }
 	    else
 	    {
@@ -154,10 +153,10 @@ T_MovePlane
 		if (flag == true)
 		{
 		    if (crush == true)
-			return crushed;
+			return res_crushed;
 		    sector->ceilingheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    return crushed;
+		    return res_crushed;
 		}
 	    }
 	    break;
@@ -173,9 +172,9 @@ T_MovePlane
 		{
 		    sector->ceilingheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    //return crushed;
+		    //return res_crushed;
 		}
-		return pastdest;
+		return res_pastdest;
 	    }
 	    else
 	    {
@@ -188,7 +187,7 @@ T_MovePlane
 		{
 		    sector->ceilingheight = lastpos;
 		    P_ChangeSector(sector,crush);
-		    return crushed;
+		    return res_crushed;
 		}
 #endif
 	    }
@@ -197,7 +196,7 @@ T_MovePlane
 	break;
 		
     }
-    return ok;
+    return res_ok;
 }
 
 
@@ -217,7 +216,7 @@ void T_MoveFloor(floormove_t* floor)
 	S_StartSound((mobj_t *)&floor->sector->soundorg,
 		     sfx_stnmov);
     
-    if (res == pastdest)
+    if (res == res_pastdest)
     {
 	floor->sector->specialdata = NULL;
 

@@ -28,29 +28,29 @@
 #endif
 
 
-extern seg_t*		curline;
-extern side_t*		sidedef;
-extern line_t*		linedef;
-extern sector_t*	frontsector;
-extern sector_t*	backsector;
+extern seg_t*		gCurline;
+extern side_t*		gSidedef;
+extern line_t*		gLinedef;
+extern sector_t*	gFrontsector;
+extern sector_t*	gBacksector;
 
-extern int		rw_x;
-extern int		rw_stopx;
+extern int		gRw_x;
+extern int		gRw_stopx;
 
-extern boolean		segtextured;
+extern boolean		gSegtextured;
 
 // false if the back side is the same plane
-extern boolean		markfloor;		
-extern boolean		markceiling;
+extern boolean		gMarkfloor;		
+extern boolean		gMarkceiling;
 
-extern boolean		skymap;
+extern boolean		gSkymap;
 
-extern drawseg_t	drawsegs[MAXDRAWSEGS];
-extern drawseg_t*	ds_p;
+extern drawseg_t	gDrawsegs[MAXDRAWSEGS];
+extern drawseg_t*	gDs_p;
 
-extern lighttable_t**	hscalelight;
-extern lighttable_t**	vscalelight;
-extern lighttable_t**	dscalelight;
+extern lighttable_t**	gHscalelight;
+extern lighttable_t**	gVscalelight;
+extern lighttable_t**	gDscalelight;
 
 
 typedef void (*drawfunc_t) (int start, int stop);

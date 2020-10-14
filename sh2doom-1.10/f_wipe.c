@@ -21,8 +21,6 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
 #include "z_zone.h"
 #include "i_video.h"
 #include "v_video.h"

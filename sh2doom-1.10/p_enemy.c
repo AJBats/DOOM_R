@@ -23,8 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "m_random.h"
@@ -129,7 +128,7 @@ P_RecursiveSound
 	
 	P_LineOpening (check);
 
-	if (openrange <= 0)
+	if (gOpenrange <= 0)
 	    continue;	// closed door
 	
 	if ( sides[ check->sidenum[0] ].sector == sec)

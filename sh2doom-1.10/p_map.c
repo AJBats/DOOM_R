@@ -22,8 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "m_bbox.h"
@@ -219,21 +218,21 @@ boolean PIT_CheckLine (line_t* ld)
 	    return false;	// block monsters only
     }
 
-    // set openrange, opentop, openbottom
+    // set gOpenrange, gOpentop, gOpenbottom
     P_LineOpening (ld);	
 	
     // adjust floor / ceiling heights
-    if (opentop < tmceilingz)
+    if (gOpentop < tmceilingz)
     {
-	tmceilingz = opentop;
+	tmceilingz = gOpentop;
 	ceilingline = ld;
     }
 
-    if (openbottom > tmfloorz)
-	tmfloorz = openbottom;	
+    if (gOpenbottom > tmfloorz)
+	tmfloorz = gOpenbottom;	
 
-    if (lowfloor < tmdropoffz)
-	tmdropoffz = lowfloor;
+    if (gLowfloor < tmdropoffz)
+	tmdropoffz = gLowfloor;
 		
     // if contacted a special line, add it to the list
     if (ld->special)
@@ -651,16 +650,16 @@ boolean PTR_SlideTraverse (intercept_t* in)
 	goto isblocking;
     }
 
-    // set openrange, opentop, openbottom
+    // set gOpenrange, gOpentop, gOpenbottom
     P_LineOpening (li);
     
-    if (openrange < slidemo->height)
+    if (gOpenrange < slidemo->height)
 	goto isblocking;		// doesn't fit
 		
-    if (opentop - slidemo->z < slidemo->height)
+    if (gOpentop - slidemo->z < slidemo->height)
 	goto isblocking;		// mobj is too high
 
-    if (openbottom - slidemo->z > 24*FRACUNIT )
+    if (gOpenbottom - slidemo->z > 24*FRACUNIT )
 	goto isblocking;		// too big a step up
 
     // this line doesn't block movement
@@ -833,21 +832,21 @@ PTR_AimTraverse (intercept_t* in)
 	// the possible target ranges.
 	P_LineOpening (li);
 	
-	if (openbottom >= opentop)
+	if (gOpenbottom >= gOpentop)
 	    return false;		// stop
 	
 	dist = FixedMul (attackrange, in->frac);
 
 	if (li->frontsector->floorheight != li->backsector->floorheight)
 	{
-	    slope = FixedDiv (openbottom - shootz , dist);
+	    slope = FixedDiv (gOpenbottom - shootz , dist);
 	    if (slope > bottomslope)
 		bottomslope = slope;
 	}
 		
 	if (li->frontsector->ceilingheight != li->backsector->ceilingheight)
 	{
-	    slope = FixedDiv (opentop - shootz , dist);
+	    slope = FixedDiv (gOpentop - shootz , dist);
 	    if (slope < topslope)
 		topslope = slope;
 	}
@@ -928,14 +927,14 @@ boolean PTR_ShootTraverse (intercept_t* in)
 
 	if (li->frontsector->floorheight != li->backsector->floorheight)
 	{
-	    slope = FixedDiv (openbottom - shootz , dist);
+	    slope = FixedDiv (gOpenbottom - shootz , dist);
 	    if (slope > aimslope)
 		goto hitline;
 	}
 		
 	if (li->frontsector->ceilingheight != li->backsector->ceilingheight)
 	{
-	    slope = FixedDiv (opentop - shootz , dist);
+	    slope = FixedDiv (gOpentop - shootz , dist);
 	    if (slope < aimslope)
 		goto hitline;
 	}
@@ -1098,7 +1097,7 @@ boolean	PTR_UseTraverse (intercept_t* in)
     if (!in->d.line->special)
     {
 	P_LineOpening (in->d.line);
-	if (openrange <= 0)
+	if (gOpenrange <= 0)
 	{
 	    S_StartSound (usething, sfx_noway);
 	    

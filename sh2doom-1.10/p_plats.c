@@ -21,8 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_random.h"
@@ -68,7 +67,7 @@ void T_PlatRaise(plat_t* plat)
 	}
 	
 				
-	if (res == crushed && (!plat->crush))
+	if (res == res_crushed && (!plat->crush))
 	{
 	    plat->count = plat->wait;
 	    plat->status = down;
@@ -77,7 +76,7 @@ void T_PlatRaise(plat_t* plat)
 	}
 	else
 	{
-	    if (res == pastdest)
+	    if (res == res_pastdest)
 	    {
 		plat->count = plat->wait;
 		plat->status = waiting;
@@ -106,7 +105,7 @@ void T_PlatRaise(plat_t* plat)
       case	down:
 	res = T_MovePlane(plat->sector,plat->speed,plat->low,false,0,-1);
 
-	if (res == pastdest)
+	if (res == res_pastdest)
 	{
 	    plat->count = plat->wait;
 	    plat->status = waiting;

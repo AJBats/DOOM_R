@@ -41,7 +41,9 @@ FixedMul
 ( fixed_t	a,
   fixed_t	b )
 {
-    return ((long long) a * (long long) b) >> FRACBITS;
+    // AJTODO use saturn's fixed type.
+    //return ((long long) a * (long long) b) >> FRACBITS;
+    return 0;
 }
 
 

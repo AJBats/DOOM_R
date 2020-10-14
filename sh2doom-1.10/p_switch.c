@@ -22,8 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "i_system.h"
 #include "doomdef.h"
 #include "p_local.h"

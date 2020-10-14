@@ -21,8 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "doomdef.h"
 
 #include "i_system.h"

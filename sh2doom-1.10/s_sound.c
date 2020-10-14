@@ -20,10 +20,11 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "jo/sgl_prototypes.h"
 
 #include "i_system.h"
 #include "i_sound.h"
@@ -651,7 +652,7 @@ S_ChangeMusic
 	 || (musicnum >= NUMMUSIC) )
     {
 	I_Error("Bad music number %d", musicnum);
-    abort();
+    SYS_Exit(0);
     }
     
 	music = &S_music[musicnum];

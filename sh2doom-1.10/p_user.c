@@ -23,8 +23,7 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <yaul.h>
-
+#include <stdbool.h>
 #include "doomdef.h"
 #include "d_event.h"
 

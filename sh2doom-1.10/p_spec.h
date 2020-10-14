@@ -600,9 +600,9 @@ typedef struct
 
 typedef enum
 {
-    ok,
-    crushed,
-    pastdest
+    res_ok,
+    res_crushed,
+    res_pastdest
     
 } result_e;
 
