@@ -284,14 +284,14 @@ P_InterceptVector
 
 //
 // P_LineOpening
-// Sets opentop and openbottom to the window
+// Sets gOpentop and gOpenbottom to the window
 // through a two sided line.
 // OPTIMIZE: keep this precalculated
 //
-fixed_t opentop;
-fixed_t openbottom;
-fixed_t openrange;
-fixed_t	lowfloor;
+fixed_t gOpentop;
+fixed_t gOpenbottom;
+fixed_t gOpenrange;
+fixed_t	gLowfloor;
 
 
 void P_LineOpening (line_t* linedef)
@@ -302,7 +302,7 @@ void P_LineOpening (line_t* linedef)
     if (linedef->sidenum[1] == -1)
     {
 	// single sided line
-	openrange = 0;
+	gOpenrange = 0;
 	return;
     }
 	 
@@ -310,22 +310,22 @@ void P_LineOpening (line_t* linedef)
     back = linedef->backsector;
 	
     if (front->ceilingheight < back->ceilingheight)
-	opentop = front->ceilingheight;
+	gOpentop = front->ceilingheight;
     else
-	opentop = back->ceilingheight;
+	gOpentop = back->ceilingheight;
 
     if (front->floorheight > back->floorheight)
     {
-	openbottom = front->floorheight;
-	lowfloor = back->floorheight;
+	gOpenbottom = front->floorheight;
+	gLowfloor = back->floorheight;
     }
     else
     {
-	openbottom = back->floorheight;
-	lowfloor = front->floorheight;
+	gOpenbottom = back->floorheight;
+	gLowfloor = front->floorheight;
     }
 	
-    openrange = opentop - openbottom;
+    gOpenrange = gOpentop - gOpenbottom;
 }
 
 

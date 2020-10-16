@@ -21,11 +21,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <jo/jo.h>
+
 #include "doomdef.h"
 
 #include "d_main.h"
 
-int main() 
+int jo_main() 
 {  
     D_DoomMain (); 
 
