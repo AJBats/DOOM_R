@@ -28,6 +28,7 @@
 #define	BGCOLOR		7
 #define	FGCOLOR		8
 
+#include <stdbool.h>
 
 #ifdef NORMALUNIX
 #include <stdio.h>
@@ -78,6 +79,9 @@
 
 
 #include "d_main.h"
+
+#include "jo/types.h"
+#include "jo/malloc.h"
 
 //
 // D-DoomLoop()
@@ -553,7 +557,9 @@ void D_AddFile (char *file)
     for (numwadfiles = 0 ; wadfiles[numwadfiles] ; numwadfiles++)
 	;
 
-    newfile = malloc (strlen(file)+1);
+    //newfile = malloc (strlen(file)+1);
+	// AJTODO did it work?
+	newfile = jo_malloc_with_behaviour(strlen(file)+1, JO_FAST_ALLOCATION);
     strcpy (newfile, file);
 	
     wadfiles[numwadfiles] = newfile;

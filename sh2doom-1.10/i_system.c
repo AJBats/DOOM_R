@@ -41,6 +41,8 @@
 #endif
 #include "i_system.h"
 
+#include "jo/types.h"
+#include "jo/malloc.h"
 
 
 
@@ -62,7 +64,9 @@ int  I_GetHeapSize (void)
 byte* I_ZoneBase (int*	size)
 {
     *size = mb_used*1024*1024;
-    return (byte *) malloc (*size);
+    //return (byte *) malloc (*size);
+    // AJTODO did it work?
+    return jo_malloc_with_behaviour(*size, JO_FAST_ALLOCATION);
 }
 
 

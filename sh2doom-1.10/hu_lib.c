@@ -20,6 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
 #include <ctype.h>
 
 #include "doomdef.h"
@@ -30,6 +31,8 @@
 #include "hu_lib.h"
 #include "r_local.h"
 #include "r_draw.h"
+
+#include "dummyfile.h"
 
 // boolean : whether the screen is always erased
 #define noterased viewwindowx

@@ -30,6 +30,7 @@
 #define O_BINARY		0
 #endif
 
+#include <stdbool.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
@@ -46,10 +47,11 @@
 #endif
 #include "w_wad.h"
 
-
-
-// AJTODO hardcode realloc prototype here for now
-extern void * __weak realloc(void *old, size_t new_len);
+#include "jo/sgl_prototypes.h"
+#include "jo/conf.h"
+#include "jo/types.h"
+#include "jo/tools.h"
+#include "jo/malloc.h"
 
 
 //
@@ -61,9 +63,6 @@ lumpinfo_t*		lumpinfo;
 int			numlumps;
 
 void**			lumpcache;
-
-
-#define strcmpi	strcasestr
 
 void strupr (char* s)
 {
@@ -175,7 +174,8 @@ void W_AddFile (char *filename)
     //printf (" adding %s\n",filename);
     startlump = numlumps;
 	
-    if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
+    // AJTODO make this work with case sensitive
+    if (jo_strcmp (filename+strlen(filename)-3 , "wad" ) )
     {
 	// single lump file
 	fileinfo = &singleinfo;
@@ -209,8 +209,11 @@ void W_AddFile (char *filename)
     }
 
     
-    // Fill in lumpinfo
-    lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
+    // AJTODO either implement realloc, or (preferred) just figure out
+    // how much memory is needed for our two fixed wads and allocated ahead of time.
+    // See what 3DO/Jag/GBA do.
+    // Fill in lumpinfo    
+    //lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
 
     if (!lumpinfo)
 	I_Error ("Couldn't realloc lumpinfo");
@@ -306,7 +309,9 @@ void W_InitMultipleFiles (char** filenames)
     numlumps = 0;
 
     // will be realloced as lumps are added
-    lumpinfo = malloc(1);	
+    //lumpinfo = malloc(1);	
+    // AJTODO consider allocing the right size ahead of time
+    lumpinfo = jo_malloc_with_behaviour(1, JO_FAST_ALLOCATION);
 
     for ( ; *filenames ; filenames++)
 	W_AddFile (*filenames);
@@ -316,7 +321,8 @@ void W_InitMultipleFiles (char** filenames)
     
     // set up caching
     size = numlumps * sizeof(*lumpcache);
-    lumpcache = malloc (size);
+    //lumpcache = malloc (size);
+    lumpcache = jo_malloc_with_behaviour(size, JO_FAST_ALLOCATION);
     
     if (!lumpcache)
 	I_Error ("Couldn't allocate lumpcache");

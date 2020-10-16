@@ -878,14 +878,14 @@ I_InitSound()
 void I_InitMusic(void)		{ }
 void I_ShutdownMusic(void)	{ }
 
-static int	looping=0;
-static int	musicdies=-1;
+static int	sLooping=0;
+static int	sMusicdies=-1;
 
 void I_PlaySong(int handle, int looping)
 {
   // UNUSED.
   handle = looping = 0;
-  musicdies = gametic + TICRATE*30;
+  sMusicdies = gametic + TICRATE*30;
 }
 
 void I_PauseSong (int handle)
@@ -905,8 +905,8 @@ void I_StopSong(int handle)
   // UNUSED.
   handle = 0;
   
-  looping = 0;
-  musicdies = 0;
+  sLooping = 0;
+  sMusicdies = 0;
 }
 
 void I_UnRegisterSong(int handle)
@@ -928,7 +928,7 @@ int I_QrySongPlaying(int handle)
 {
   // UNUSED.
   handle = 0;
-  return looping || musicdies > gametic;
+  return sLooping || sMusicdies > gametic;
 }
 
 

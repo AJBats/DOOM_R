@@ -20,6 +20,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -548,46 +549,46 @@ boolean G_Responder (event_t* ev)
     { 
 	if (F_Responder (ev)) 
 	    return true;	// finale ate the event 
-    } 
-	 
-    switch (ev->type) 
-    { 
-      case ev_keydown: 
-	if (ev->data1 == KEY_PAUSE) 
-	{ 
-	    sendpause = true; 
-	    return true; 
-	} 
-	if (ev->data1 <NUMKEYS) 
-	    gamekeydown[ev->data1] = true; 
-	return true;    // eat key down events 
- 
-      case ev_keyup: 
-	if (ev->data1 <NUMKEYS) 
-	    gamekeydown[ev->data1] = false; 
-	return false;   // always let key up events filter down 
-		 
-      case ev_mouse: 
-	mousebuttons[0] = ev->data1 & 1; 
-	mousebuttons[1] = ev->data1 & 2; 
-	mousebuttons[2] = ev->data1 & 4; 
-	mousex = ev->data2*(mouseSensitivity+5)/10; 
-	mousey = ev->data3*(mouseSensitivity+5)/10; 
-	return true;    // eat events 
- 
-      case ev_joystick: 
-	joybuttons[0] = ev->data1 & 1; 
-	joybuttons[1] = ev->data1 & 2; 
-	joybuttons[2] = ev->data1 & 4; 
-	joybuttons[3] = ev->data1 & 8; 
-	joyxmove = ev->data2; 
-	joyymove = ev->data3; 
-	return true;    // eat events 
- 
-      default: 
-	break; 
-    } 
- 
+    }
+
+    switch (ev->type)
+    {
+    case ev_keydown:
+        if (ev->data1 == KEY_PAUSE)
+        {
+            sendpause = true;
+            return true;
+        }
+        if (ev->data1 < NUMKEYS)
+            gamekeydown[ev->data1] = true;
+        return true; // eat key down events
+
+    case ev_keyup:
+        if (ev->data1 < NUMKEYS)
+            gamekeydown[ev->data1] = false;
+        return false; // always let key up events filter down
+
+    case ev_mouse:
+        mousebuttons[0] = ev->data1 & 1;
+        mousebuttons[1] = ev->data1 & 2;
+        mousebuttons[2] = ev->data1 & 4;
+        mousex = ev->data2 * (mouseSensitivity + 5) / 10;
+        mousey = ev->data3 * (mouseSensitivity + 5) / 10;
+        return true; // eat events
+
+    case ev_joystick:
+        joybuttons[0] = ev->data1 & 1;
+        joybuttons[1] = ev->data1 & 2;
+        joybuttons[2] = ev->data1 & 4;
+        joybuttons[3] = ev->data1 & 8;
+        joyxmove = ev->data2;
+        joyymove = ev->data3;
+        return true; // eat events
+
+    default:
+        break;
+    }
+
     return false; 
 } 
  

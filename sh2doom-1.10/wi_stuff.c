@@ -21,6 +21,7 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "z_zone.h"
@@ -369,7 +370,7 @@ static patch_t*		sp_secret;
 static patch_t*		kills;
 static patch_t*		secret;
 static patch_t*		items;
-static patch_t*		frags;
+static patch_t*		sFrags;
 
 // Time sucks.
 static patch_t*		time;
@@ -386,7 +387,7 @@ static patch_t*		star;
 static patch_t*		bstar;
 
 // "red P[1..MAXPLAYERS]"
-static patch_t*		p[MAXPLAYERS];
+static patch_t*		sP[MAXPLAYERS];
 
 // "gray P[1..MAXPLAYERS]"
 static patch_t*		bp[MAXPLAYERS];
@@ -1002,24 +1003,24 @@ void WI_drawDeathmatchStats(void)
     {
 	if (playeringame[i])
 	{
-	    V_DrawPatch(x-SHORT(p[i]->width)/2,
+	    V_DrawPatch(x-SHORT(sP[i]->width)/2,
 			DM_MATRIXY - WI_SPACINGY,
 			FB,
-			p[i]);
+			sP[i]);
 	    
-	    V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2,
+	    V_DrawPatch(DM_MATRIXX-SHORT(sP[i]->width)/2,
 			y,
 			FB,
-			p[i]);
+			sP[i]);
 
 	    if (i == me)
 	    {
-		V_DrawPatch(x-SHORT(p[i]->width)/2,
+		V_DrawPatch(x-SHORT(sP[i]->width)/2,
 			    DM_MATRIXY - WI_SPACINGY,
 			    FB,
 			    bstar);
 
-		V_DrawPatch(DM_MATRIXX-SHORT(p[i]->width)/2,
+		V_DrawPatch(DM_MATRIXX-SHORT(sP[i]->width)/2,
 			    y,
 			    FB,
 			    star);
@@ -1271,8 +1272,8 @@ void WI_drawNetgameStats(void)
 		NG_STATSY, FB, secret);
     
     if (dofrags)
-	V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(frags->width),
-		    NG_STATSY, FB, frags);
+	V_DrawPatch(NG_STATSX+4*NG_SPACINGX-SHORT(sFrags->width),
+		    NG_STATSY, FB, sFrags);
 
     // draw stats
     y = NG_STATSY + SHORT(kills->height);
@@ -1283,10 +1284,10 @@ void WI_drawNetgameStats(void)
 	    continue;
 
 	x = NG_STATSX;
-	V_DrawPatch(x-SHORT(p[i]->width), y, FB, p[i]);
+	V_DrawPatch(x-SHORT(sP[i]->width), y, FB, sP[i]);
 
 	if (i == me)
-	    V_DrawPatch(x-SHORT(p[i]->width), y, FB, star);
+	    V_DrawPatch(x-SHORT(sP[i]->width), y, FB, star);
 
 	x += NG_SPACINGX;
 	WI_drawPercent(x-pwidth, y+10, cnt_kills[i]);	x += NG_SPACINGX;
@@ -1651,7 +1652,7 @@ void WI_loadData(void)
 	items = W_CacheLumpName("WIOSTI", PU_STATIC);
 
     // "frgs"
-    frags = W_CacheLumpName("WIFRGS", PU_STATIC);    
+    sFrags = W_CacheLumpName("WIFRGS", PU_STATIC);    
 
     // ":"
     colon = W_CacheLumpName("WICOLON", PU_STATIC); 
@@ -1684,7 +1685,7 @@ void WI_loadData(void)
     {
 	// "1,2,3,4"
 	sprintf(name, "STPB%d", i);      
-	p[i] = W_CacheLumpName(name, PU_STATIC);
+	sP[i] = W_CacheLumpName(name, PU_STATIC);
 
 	// "1,2,3,4"
 	sprintf(name, "WIBP%d", i+1);     
@@ -1739,7 +1740,7 @@ void WI_unloadData(void)
     Z_ChangeTag(secret, PU_CACHE);
     Z_ChangeTag(sp_secret, PU_CACHE);
     Z_ChangeTag(items, PU_CACHE);
-    Z_ChangeTag(frags, PU_CACHE);
+    Z_ChangeTag(sFrags, PU_CACHE);
     Z_ChangeTag(time, PU_CACHE);
     Z_ChangeTag(sucks, PU_CACHE);
     Z_ChangeTag(par, PU_CACHE);
@@ -1751,7 +1752,7 @@ void WI_unloadData(void)
     //  Z_ChangeTag(bstar, PU_CACHE);
     
     for (i=0 ; i<MAXPLAYERS ; i++)
-	Z_ChangeTag(p[i], PU_CACHE);
+	Z_ChangeTag(sP[i], PU_CACHE);
 
     for (i=0 ; i<MAXPLAYERS ; i++)
 	Z_ChangeTag(bp[i], PU_CACHE);

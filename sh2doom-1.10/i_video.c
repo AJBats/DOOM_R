@@ -369,22 +369,22 @@ void I_FinishUpdate (void)
 
     static int	lasttic;
     int		tics;
-    int		i;
+    int		it;
     // UNUSED static unsigned char *bigscreen=0;
 
     // draws little dots on the bottom of the screen
     if (devparm)
     {
 
-	i = I_GetTime();
-	tics = i - lasttic;
-	lasttic = i;
+	it = I_GetTime();
+	tics = it - lasttic;
+	lasttic = it;
 	if (tics > 20) tics = 20;
 
-	for (i=0 ; i<tics*2 ; i+=2)
-	    screens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0xff;
-	for ( ; i<20*2 ; i+=2)
-	    screens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0x0;
+	for (it=0 ; it<tics*2 ; it+=2)
+	    screens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + it] = 0xff;
+	for ( ; it<20*2 ; it+=2)
+	    screens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + it] = 0x0;
     
     }
 
@@ -393,13 +393,13 @@ void I_FinishUpdate (void)
     {
 	unsigned int *olineptrs[2];
 	unsigned int *ilineptr;
-	int x, y, i;
+	int x, y;//, i;
 	unsigned int twoopixels;
 	unsigned int twomoreopixels;
 	unsigned int fouripixels;
 
 	ilineptr = (unsigned int *) (screens[0]);
-	for (i=0 ; i<2 ; i++)
+	//for (i=0 ; i<2 ; i++)
 	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
 	y = SCREENHEIGHT;
@@ -436,12 +436,12 @@ void I_FinishUpdate (void)
     {
 	unsigned int *olineptrs[3];
 	unsigned int *ilineptr;
-	int x, y, i;
+	int x, y;//, i;
 	unsigned int fouropixels[3];
 	unsigned int fouripixels;
 
 	ilineptr = (unsigned int *) (screens[0]);
-	for (i=0 ; i<3 ; i++)
+	//for (i=0 ; i<3 ; i++)
 	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
 	y = SCREENHEIGHT;

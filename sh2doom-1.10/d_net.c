@@ -22,7 +22,7 @@
 //
 //-----------------------------------------------------------------------------
 
-
+#include <stdbool.h>
 #include "m_menu.h"
 #include "i_system.h"
 #include "i_video.h"
