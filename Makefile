@@ -67,7 +67,8 @@ sh2doom-1.10/z_zone.o \
 sh2doom-1.10/v_video.o \
 sh2doom-1.10/w_wad.o \
 sh2doom-1.10/st_stuff.o \
-sh2doom-1.10/dummyfile.o
+sh2doom-1.10/dummyfile.o \
+sh2doom-1.10/block.o 
 
 SH_LIBRARIES:=
 SH_CFLAGS+= -O2 -I. -save-temps
@@ -76,7 +77,7 @@ IP_VERSION:= V1.000
 IP_RELEASE_DATE:= 20160101
 IP_AREAS:= JTUBKAEL
 IP_PERIPHERALS:= JAMKST
-IP_TITLE:= C++ test
+IP_TITLE:= DOOM
 IP_MASTER_STACK_ADDR:= 0x06004000
 IP_SLAVE_STACK_ADDR:= 0x06001000
 IP_1ST_READ_ADDR:= 0x06004000
