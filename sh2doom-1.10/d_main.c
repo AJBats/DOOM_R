@@ -815,6 +815,10 @@ void D_DoomMain (void)
 	
     modifiedgame = false;
 
+	gamemode = commercial;
+
+	// I just dont care about this code :/
+#ifdef AJ_RM
     switch ( gamemode )
     {
       case retail:
@@ -874,6 +878,7 @@ void D_DoomMain (void)
 
     if (devparm)
 	printf(D_DEVSTR);
+#endif
     
 	// AJTODO What is this? It defaults to off
     // turbo option	
@@ -1038,6 +1043,7 @@ void D_DoomMain (void)
     W_InitMultipleFiles (wadfiles);
     
 
+#if AJ_RM
     // Check for -file in shareware
     if (modifiedgame)
     {
@@ -1077,8 +1083,9 @@ void D_DoomMain (void)
 	// AJTODO setup controller to do getchar
 	//getchar ();
     }
-	
+#endif
 
+#if AJ_RM
     // Check and print which version is executed.
     switch ( gamemode )
     {
@@ -1105,6 +1112,7 @@ void D_DoomMain (void)
 	// Ouch.
 	break;
     }
+#endif
 
     printf ("M_Init: Init miscellaneous info.\n");
     M_Init ();

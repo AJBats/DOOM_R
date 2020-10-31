@@ -36,13 +36,13 @@ int main()
     dbgio_dev_font_load();
     dbgio_dev_font_load_wait();
 
-    dbgio_puts("[1;1HHello Doom\n");
-    
-    while (true) 
-    {
-        dbgio_flush();
-        vdp_sync();
-    }
+    //dbgio_puts("[1;1HHello Doom\n");
+    //
+    //while (true) 
+    //{
+    //    dbgio_flush();
+    //    vdp_sync();
+    //}
 
     D_DoomMain (); 
 

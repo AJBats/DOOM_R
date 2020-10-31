@@ -37,7 +37,7 @@
 
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
-byte*				screens[5];	
+byte*				sScreens[5];	
  
 int				dirtybox[4]; 
 
@@ -180,8 +180,8 @@ V_CopyRect
 #endif 
     V_MarkRect (destx, desty, width, height); 
 	 
-    src = screens[srcscrn]+SCREENWIDTH*srcy+srcx; 
-    dest = screens[destscrn]+SCREENWIDTH*desty+destx; 
+    src = sScreens[srcscrn]+SCREENWIDTH*srcy+srcx; 
+    dest = sScreens[destscrn]+SCREENWIDTH*desty+destx; 
 
     for ( ; height>0 ; height--) 
     { 
@@ -232,7 +232,7 @@ V_DrawPatch
 	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
 
     col = 0; 
-    desttop = screens[scrn]+y*SCREENWIDTH+x; 
+    desttop = sScreens[scrn]+y*SCREENWIDTH+x; 
 	 
     w = SHORT(patch->width); 
 
@@ -297,7 +297,7 @@ V_DrawPatchFlipped
 	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
 
     col = 0; 
-    desttop = screens[scrn]+y*SCREENWIDTH+x; 
+    desttop = sScreens[scrn]+y*SCREENWIDTH+x; 
 	 
     w = SHORT(patch->width); 
 
@@ -421,7 +421,7 @@ V_DrawBlock
  
     V_MarkRect (x, y, width, height); 
  
-    dest = screens[scrn] + y*SCREENWIDTH+x; 
+    dest = sScreens[scrn] + y*SCREENWIDTH+x; 
 
     while (height--) 
     { 
@@ -459,7 +459,7 @@ V_GetBlock
     }
 #endif 
  
-    src = screens[scrn] + y*SCREENWIDTH+x; 
+    src = sScreens[scrn] + y*SCREENWIDTH+x; 
 
     while (height--) 
     { 
@@ -485,5 +485,5 @@ void V_Init (void)
     base = I_AllocLow (SCREENWIDTH*SCREENHEIGHT*4);
 
     for (i=0 ; i<4 ; i++)
-	screens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+	sScreens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
 }

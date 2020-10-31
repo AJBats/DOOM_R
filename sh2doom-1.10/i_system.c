@@ -44,7 +44,7 @@
 
 
 
-int	mb_used = 6;
+int	mb_used = 5;
 
 
 ticcmd_t	emptycmd;
@@ -56,12 +56,12 @@ ticcmd_t*	I_BaseTiccmd(void)
 
 int  I_GetHeapSize (void)
 {
-    return mb_used*1024*1024;
+    return mb_used*100*1024;
 }
 
 byte* I_ZoneBase (int*	size)
 {
-    *size = mb_used*1024*1024;
+    *size = mb_used*100*1024;
     return (byte *) malloc (*size);
 }
 

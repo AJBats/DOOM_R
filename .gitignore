@@ -14,4 +14,6 @@ ABS.TXT
 BIB.TXT
 CPY.TXT
 *.vscode
+DOOM.WAD
+DOOM2.WAD
 compile_commands.json

@@ -4,6 +4,8 @@
 
 __BEGIN_DECLS
 
+#define DEBUG_PRINT 1
+
 #define FILE int
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -24,6 +26,11 @@ fclose(FILE* _Stream)
 {
     return 0;
 }
+
+#if DEBUG_PRINT == 1
+void getinput();
+void clearscreen();
+#endif
 #pragma GCC diagnostic pop // "-Wunused-parameter"
 
 __END_DECLS

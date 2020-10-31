@@ -1261,16 +1261,19 @@ void G_DoLoadGame (void)
 //
 void
 G_SaveGame
-( int	slot,
-  char*	description ) 
+( int	__unused slot,
+  char*	__unused description ) 
 { 
+#ifdef AJ_RM
     savegameslot = slot; 
     strcpy (savedescription, description); 
     sendsave = true; 
+#endif
 } 
  
 void G_DoSaveGame (void) 
 { 
+#ifdef AJ_RM
     char	name[100]; 
     char	name2[VERSIONSIZE]; 
     char*	description; 
@@ -1284,7 +1287,7 @@ void G_DoSaveGame (void)
 	//sprintf (name,SAVEGAMENAME"%d.dsg",savegameslot); 
     description = savedescription; 
 	 
-    save_p = savebuffer = screens[1]+0x4000; 
+    save_p = savebuffer = sScreens[1]+0x4000; 
 	 
     memcpy (save_p, description, SAVESTRINGSIZE); 
     save_p += SAVESTRINGSIZE; 
@@ -1320,6 +1323,7 @@ void G_DoSaveGame (void)
 
     // draw the pattern into the back screen
     R_FillBackScreen ();	
+#endif
 } 
  
 
