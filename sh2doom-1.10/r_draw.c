@@ -712,7 +712,7 @@ R_InitBuffer
 
     // Preclaculate all row offsets.
     for (i=0 ; i<height ; i++) 
-	ylookup[i] = sScreens[0] + (i+viewwindowy)*SCREENWIDTH; 
+	ylookup[i] = gScreens[0] + (i+viewwindowy)*SCREENWIDTH; 
 } 
  
  
@@ -749,7 +749,7 @@ void R_FillBackScreen (void)
 	name = name1;
     
     src = W_CacheLumpName (name, PU_CACHE); 
-    dest = sScreens[1]; 
+    dest = gScreens[1]; 
 	 
     for (y=0 ; y<SCREENHEIGHT-SBARHEIGHT ; y++) 
     { 
@@ -820,7 +820,7 @@ R_VideoErase
   //  is not optiomal, e.g. byte by byte on
   //  a 32bit CPU, as GNU GCC/Linux libc did
   //  at one point.
-    memcpy (sScreens[0]+ofs, sScreens[1]+ofs, count); 
+    memcpy (gScreens[0]+ofs, gScreens[1]+ofs, count); 
 } 
 
 

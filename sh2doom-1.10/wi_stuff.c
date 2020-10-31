@@ -406,7 +406,7 @@ static patch_t**	lnames;
 
 void WI_slamBackground(void)
 {
-    memcpy(sScreens[0], sScreens[1], SCREENWIDTH * SCREENHEIGHT);
+    memcpy(gScreens[0], gScreens[1], SCREENWIDTH * SCREENHEIGHT);
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 }
 

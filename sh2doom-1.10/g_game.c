@@ -1261,8 +1261,8 @@ void G_DoLoadGame (void)
 //
 void
 G_SaveGame
-( int	__unused slot,
-  char*	__unused description ) 
+( int	slot __unused,
+  char*	description __unused) 
 { 
 #ifdef AJ_RM
     savegameslot = slot; 
@@ -1287,7 +1287,7 @@ void G_DoSaveGame (void)
 	//sprintf (name,SAVEGAMENAME"%d.dsg",savegameslot); 
     description = savedescription; 
 	 
-    save_p = savebuffer = sScreens[1]+0x4000; 
+    save_p = savebuffer = gScreens[1]+0x4000; 
 	 
     memcpy (save_p, description, SAVESTRINGSIZE); 
     save_p += SAVESTRINGSIZE; 

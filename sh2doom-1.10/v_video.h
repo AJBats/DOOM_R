@@ -44,7 +44,7 @@
 
 
 
-extern	byte*		sScreens[5];
+extern	byte*		gScreens[5];
 
 extern  int	dirtybox[4];
 

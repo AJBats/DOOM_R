@@ -270,7 +270,7 @@ void F_TextWrite (void)
     
     // erase the entire screen to a tiled background
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
-    dest = sScreens[0];
+    dest = gScreens[0];
 	
     for (y=0 ; y<SCREENHEIGHT ; y++)
     {
@@ -617,7 +617,7 @@ F_DrawPatchCol
     int		count;
 	
     column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
-    desttop = sScreens[0]+x;
+    desttop = gScreens[0]+x;
 
     // step through the posts in a column
     while (column->topdelta != 0xff )

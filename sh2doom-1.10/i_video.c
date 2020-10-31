@@ -382,9 +382,9 @@ void I_FinishUpdate (void)
 	if (tics > 20) tics = 20;
 
 	for (i=0 ; i<tics*2 ; i+=2)
-	    sScreens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0xff;
+	    gScreens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0xff;
 	for ( ; i<20*2 ; i+=2)
-	    sScreens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0x0;
+	    gScreens[0][ (SCREENHEIGHT-1)*SCREENWIDTH + i] = 0x0;
     
     }
 
@@ -398,7 +398,7 @@ void I_FinishUpdate (void)
 	unsigned int twomoreopixels;
 	unsigned int fouripixels;
 
-	ilineptr = (unsigned int *) (sScreens[0]);
+	ilineptr = (unsigned int *) (gScreens[0]);
 	for (i=0 ; i<2 ; i++)
 	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
@@ -440,7 +440,7 @@ void I_FinishUpdate (void)
 	unsigned int fouropixels[3];
 	unsigned int fouripixels;
 
-	ilineptr = (unsigned int *) (sScreens[0]);
+	ilineptr = (unsigned int *) (gScreens[0]);
 	for (i=0 ; i<3 ; i++)
 	    //olineptrs[i] = (unsigned int *) &image->data[i*X_width]; // AJTODO
 
@@ -543,7 +543,7 @@ void I_FinishUpdate (void)
 //
 void I_ReadScreen (byte* scr)
 {
-    memcpy (scr, sScreens[0], SCREENWIDTH*SCREENHEIGHT);
+    memcpy (scr, gScreens[0], SCREENWIDTH*SCREENHEIGHT);
 }
 
 
