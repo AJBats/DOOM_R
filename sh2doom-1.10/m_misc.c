@@ -296,8 +296,9 @@ default_t	defaults[] =
     {"snd_channels",&numChannels, 3, 0, 0},
 
 
-
+#ifdef AJ_RM
     {"usegamma",&usegamma, 0, 0, 0},
+#endif
 
     {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0, 0, 0 },
     {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1, 0, 0 },

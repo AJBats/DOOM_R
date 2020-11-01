@@ -37,7 +37,7 @@
 //
 
 // when zero, stop the wipe
-static boolean	go = 0;
+static boolean	go __unused = 0;
 
 static byte*	wipe_scr_start;
 static byte*	wipe_scr_end;
@@ -236,10 +236,12 @@ wipe_StartScreen
 ( int	x,
   int	y,
   int	width,
-  int	height )
+  int	height)
 {
+#ifdef AJ_RM
     wipe_scr_start = gScreens[2];
     I_ReadScreen(wipe_scr_start);
+#endif
     return 0;
 }
 
@@ -250,9 +252,11 @@ wipe_EndScreen
   int	width,
   int	height )
 {
+#ifdef AJ_RM
     wipe_scr_end = gScreens[3];
     I_ReadScreen(wipe_scr_end);
-    V_DrawBlock(x, y, 0, width, height, wipe_scr_start); // restore start scr.
+    V_DrawBlock(x, y, 0, width, height, wipe_scr_start); // restore start scr.    
+#endif
     return 0;
 }
 
@@ -265,6 +269,7 @@ wipe_ScreenWipe
   int	height,
   int	ticks )
 {
+#ifdef AJ_RM
     int rc;
     static int (*wipes[])(int, int, int) =
     {
@@ -296,7 +301,8 @@ wipe_ScreenWipe
     }
 
     return !go;
-
+#endif
+    return 0;
 }
 
 #pragma GCC diagnostic pop // "-Wunused-parameter"

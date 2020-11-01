@@ -1463,7 +1463,10 @@ void ST_Stop (void)
 
 void ST_Init (void)
 {
+
     veryfirsttime = 0;
     ST_loadData();
+#ifdef AJ_RM
     gScreens[4] = (byte *) Z_Malloc(ST_WIDTH*ST_HEIGHT, PU_STATIC, 0);
+#endif
 }

@@ -35,13 +35,11 @@
 
 #include "v_video.h"
 
-
+#ifdef AJ_RM
 // Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
 byte*				gScreens[5];	
  
 int				dirtybox[4]; 
-
-
 
 // Now where did these came from?
 byte gammatable[5][256] =
@@ -128,9 +126,13 @@ byte gammatable[5][256] =
      251,252,252,253,254,254,255,255}
 };
 
-
-
 int	usegamma;
+#endif
+
+
+
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 			 
 //
 // V_MarkRect 
@@ -142,8 +144,10 @@ V_MarkRect
   int		width,
   int		height ) 
 { 
+#ifdef AJ_RM
     M_AddToBox (dirtybox, x, y); 
     M_AddToBox (dirtybox, x+width-1, y+height-1); 
+#endif
 } 
  
 
@@ -161,6 +165,7 @@ V_CopyRect
   int		desty,
   int		destscrn ) 
 { 
+#ifdef AJ_RM
     byte*	src;
     byte*	dest; 
 	 
@@ -189,6 +194,7 @@ V_CopyRect
 	src += SCREENWIDTH; 
 	dest += SCREENWIDTH; 
     } 
+#endif
 } 
  
 
@@ -203,6 +209,7 @@ V_DrawPatch
   int		scrn,
   patch_t*	patch ) 
 { 
+#ifdef AJ_RM
 
     int		count;
     int		col; 
@@ -255,7 +262,8 @@ V_DrawPatch
 	    column = (column_t *)(  (byte *)column + column->length 
 				    + 4 ); 
 	} 
-    }			 
+    }
+#endif		 
 } 
  
 //
@@ -270,6 +278,7 @@ V_DrawPatchFlipped
   int		scrn,
   patch_t*	patch ) 
 { 
+#ifdef AJ_RM
 
     int		count;
     int		col; 
@@ -320,7 +329,8 @@ V_DrawPatchFlipped
 	    column = (column_t *)(  (byte *)column + column->length 
 				    + 4 ); 
 	} 
-    }			 
+    }	
+#endif		 
 } 
  
 
@@ -336,6 +346,7 @@ V_DrawPatchDirect
   int		scrn,
   patch_t*	patch ) 
 {
+#ifdef AJ_RM
     V_DrawPatch (x,y,scrn, patch); 
 
     /*
@@ -389,6 +400,7 @@ V_DrawPatchDirect
 	if ( ((++x)&3) == 0 ) 
 	    desttop++;	// go to next byte, not next plane 
     }*/ 
+#endif
 } 
  
 
@@ -406,6 +418,7 @@ V_DrawBlock
   int		height,
   byte*		src ) 
 { 
+#ifdef AJ_RM
     byte*	dest; 
 	 
 #ifdef RANGECHECK 
@@ -429,6 +442,7 @@ V_DrawBlock
 	src += width; 
 	dest += SCREENWIDTH; 
     } 
+#endif
 } 
  
 
@@ -446,6 +460,7 @@ V_GetBlock
   int		height,
   byte*		dest ) 
 { 
+#ifdef AJ_RM
     byte*	src; 
 	 
 #ifdef RANGECHECK 
@@ -467,6 +482,7 @@ V_GetBlock
 	src += SCREENWIDTH; 
 	dest += width; 
     } 
+#endif
 } 
 
 
@@ -477,6 +493,7 @@ V_GetBlock
 // 
 void V_Init (void) 
 { 
+#ifdef AJ_RM
     int		i;
     byte*	base;
 		
@@ -486,4 +503,7 @@ void V_Init (void)
 
     for (i=0 ; i<4 ; i++)
 	gScreens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+#endif
 }
+
+#pragma GCC diagnostic pop // "-Wunused-parameter"

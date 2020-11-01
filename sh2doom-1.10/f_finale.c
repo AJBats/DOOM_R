@@ -258,6 +258,8 @@ extern	patch_t *hu_font[HU_FONTSIZE];
 
 void F_TextWrite (void)
 {
+	// AJTODO
+#ifdef AJ_RM
     byte*	src;
     byte*	dest;
     
@@ -321,7 +323,7 @@ void F_TextWrite (void)
 	V_DrawPatch(cx, cy, 0, hu_font[c]);
 	cx+=w;
     }
-	
+#endif
 }
 
 //
@@ -606,10 +608,11 @@ void F_CastDrawer (void)
 //
 void
 F_DrawPatchCol
-( int		x,
-  patch_t*	patch,
-  int		col )
+( int		x __unused,
+  patch_t*	patch __unused,
+  int		col __unused)
 {
+#ifdef AJ_RM
     column_t*	column;
     byte*	source;
     byte*	dest;
@@ -633,6 +636,7 @@ F_DrawPatchCol
 	}
 	column = (column_t *)(  (byte *)column + column->length + 4 );
     }
+#endif
 }
 
 

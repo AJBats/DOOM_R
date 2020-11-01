@@ -91,7 +91,7 @@ int		doPointerWarp = POINTER_WARP_COUNTDOWN;
 // replace each 320x200 pixel with multiply*multiply pixels.
 // According to Dave Taylor, it still is a bonehead thing
 // to use ....
-static int	multiply=1;
+static int	multiply __unused=1;
 
 
 //
@@ -366,7 +366,8 @@ void I_UpdateNoBlit (void)
 //
 void I_FinishUpdate (void)
 {
-
+	// AJTODO This looks like its drawing the frame to the display device.
+#ifdef AJ_RM
     static int	lasttic;
     int		tics;
     int		i;
@@ -495,8 +496,7 @@ void I_FinishUpdate (void)
   	//Expand4 ((unsigned *)(screens[0]), (double *) (image->data)); // AJTODO What is this doing?
     }
 
-	// AJTODO This looks like its drawing the frame to the display device.
-#ifdef AJ_RM
+
     if (doShm)
     {
 
@@ -541,9 +541,11 @@ void I_FinishUpdate (void)
 //
 // I_ReadScreen
 //
-void I_ReadScreen (byte* scr)
+void I_ReadScreen (byte* scr __unused)
 {
+#ifdef AJ_RM
     memcpy (scr, gScreens[0], SCREENWIDTH*SCREENHEIGHT);
+#endif
 }
 
 

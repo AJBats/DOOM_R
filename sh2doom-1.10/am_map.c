@@ -456,6 +456,8 @@ void AM_changeWindowLoc(void)
 //
 void AM_initVariables(void)
 {
+	// AJTODO
+#ifdef AJ_RM
     int pnum;
     static event_t st_notify = { ev_keyup, AM_MSGENTERED, 0, 0 };
 
@@ -492,7 +494,7 @@ void AM_initVariables(void)
 
     // inform the status bar of the change
     ST_Responder(&st_notify);
-
+#endif
 }
 
 //

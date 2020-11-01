@@ -1597,7 +1597,8 @@ boolean M_Responder (event_t* ev)
 	    S_StartSound(NULL,sfx_swtchn);
 	    M_QuitDOOM(0);
 	    return true;
-				
+
+#ifdef AJ_RM		
 	  case KEY_F11:           // gamma toggle
 	    usegamma++;
 	    if (usegamma > 4)
@@ -1605,6 +1606,7 @@ boolean M_Responder (event_t* ev)
 	    players[consoleplayer].message = gammamsg[usegamma];
 	    I_SetPalette (W_CacheLumpName ("PLAYPAL",PU_CACHE));
 	    return true;
+#endif
 				
 	}
 

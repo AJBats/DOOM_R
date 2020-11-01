@@ -690,9 +690,10 @@ void R_DrawSpanLow (void)
 //
 void
 R_InitBuffer
-( int		width,
-  int		height ) 
+( int		width __unused,
+  int		height __unused) 
 { 
+#ifdef AJ_RM
     int		i; 
 
     // Handle resize,
@@ -713,6 +714,7 @@ R_InitBuffer
     // Preclaculate all row offsets.
     for (i=0 ; i<height ; i++) 
 	ylookup[i] = gScreens[0] + (i+viewwindowy)*SCREENWIDTH; 
+#endif
 } 
  
  
@@ -726,6 +728,7 @@ R_InitBuffer
 //
 void R_FillBackScreen (void) 
 { 
+#ifdef AJ_RM
     byte*	src;
     byte*	dest; 
     int		x;
@@ -804,6 +807,7 @@ void R_FillBackScreen (void)
 		 viewwindowy+viewheight,
 		 1,
 		 W_CacheLumpName ("brdr_br",PU_CACHE));
+#endif
 } 
  
 
@@ -812,15 +816,17 @@ void R_FillBackScreen (void)
 //
 void
 R_VideoErase
-( unsigned	ofs,
-  int		count ) 
+( unsigned	ofs __unused,
+  int		count __unused) 
 { 
+#ifdef AJ_RM
   // LFB copy.
   // This might not be a good idea if memcpy
   //  is not optiomal, e.g. byte by byte on
   //  a 32bit CPU, as GNU GCC/Linux libc did
   //  at one point.
     memcpy (gScreens[0]+ofs, gScreens[1]+ofs, count); 
+#endif
 } 
 
 
