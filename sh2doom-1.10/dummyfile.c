@@ -35,6 +35,7 @@ void clearscreen()
 
 void getinput()
 {
+    //static int counter = 0;
     static smpc_peripheral_digital_t _digital;
     bool held = false;
 
@@ -45,6 +46,9 @@ void getinput()
 
     while (true)
     {
+        //dbgio_printf("[%d;1H %d _dig.pre.raw %X  held %d", counter % 28 + 1, counter % 28, _digital.pressed.raw, held);
+        //counter++;
+
         dbgio_flush();
         vdp_sync();
 

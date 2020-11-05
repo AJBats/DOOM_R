@@ -25,8 +25,10 @@
 #include "doomdef.h"
 
 #include "d_main.h"
+#include "dummyfile.h"
 
 static void _hardware_init(void);
+static void _vblank_out_handler(void *);
 
 int main() 
 {  
@@ -36,13 +38,6 @@ int main()
     dbgio_dev_font_load();
     dbgio_dev_font_load_wait();
 
-    //dbgio_puts("[1;1HHello Doom\n");
-    //
-    //while (true) 
-    //{
-    //    dbgio_flush();
-    //    vdp_sync();
-    //}
 
     D_DoomMain (); 
 
@@ -57,7 +52,14 @@ static void _hardware_init(void)
     vdp2_scrn_back_screen_color_set(VDP2_VRAM_ADDR(3, 0x01FFFE),
         COLOR_RGB1555(1, 0, 3, 15));
 
+    vdp_sync_vblank_out_set(_vblank_out_handler);
+
     cpu_intc_mask_set(0);
 
     vdp2_tvmd_display_set();
+}
+
+static void _vblank_out_handler(void *work __unused)
+{
+    smpc_peripheral_intback_issue();
 }
