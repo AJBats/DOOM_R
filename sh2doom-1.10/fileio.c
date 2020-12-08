@@ -3,7 +3,27 @@
 #include <yaul.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include "dummyfile.h"
+#include "fileio.h"
+
+FilesystemData gCdFilesystemData;
+FilesystemHeaderTable gCdHeaderTable;
+
+
+void initializeFilesystem()
+{
+    // CDBlock Initialization.
+    const int stat = initializeCDBlock();
+    assert(stat == 0);
+
+    readFilesystem(&sCdFilesystemData);
+
+    // Create cd entries table (necessary for looking for files).
+    const uint32_t tableSize = getHeaderTableSize(&sCdFilesystemData);
+
+    sCdHeaderTable.entries = (FilesystemEntry*) malloc(tableSize);
+
+    fillHeaderTable(&sCdFilesystemData, &sCdHeaderTable);
+}
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 int printf(const char * __restrict fmt, ...)

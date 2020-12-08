@@ -28,7 +28,7 @@
 #define __Z_ZONE__
 
 #include <stdio.h>
-#include "dummyfile.h"
+#include "fileio.h"
 
 //
 // ZONE MEMORY

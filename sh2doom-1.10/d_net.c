@@ -32,7 +32,7 @@
 #include "doomdef.h"
 #include "doomstat.h"
 
-#include "dummyfile.h"
+#include "fileio.h"
 
 #define	NCMD_EXIT		0x80000000
 #define	NCMD_RETRANSMIT		0x40000000
