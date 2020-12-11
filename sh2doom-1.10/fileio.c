@@ -6,7 +6,6 @@
 #include <stdarg.h>
 #include "fileio.h"
 
-static iso9660_filelist_t sFilelist;
 static iso9660_filelist_entry_t sFilelistEntries[2];
 #define DOOMWAD  0
 #define DOOM2WAD 1
@@ -20,11 +19,17 @@ void initFileSystem()
     memcpy(&sFilelistEntries[0], &tmpFilelist.entries[4], sizeof(iso9660_filelist_entry_t));
     memcpy(&sFilelistEntries[1], &tmpFilelist.entries[5], sizeof(iso9660_filelist_entry_t));
 
-    sFilelist.entries = sFilelistEntries;
-    sFilelist.entries_pooled_count = tmpFilelist.entries_pooled_count;
-    sFilelist.entries_count = tmpFilelist.entries_count;
-
     free(tmpFilelist.entries);
+}
+
+iso9660_filelist_entry_t* GetDoomWad()
+{
+    return &sFilelistEntries[DOOMWAD];
+}
+
+iso9660_filelist_entry_t* GetDoom2Wad()
+{
+    return &sFilelistEntries[DOOM2WAD];
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
