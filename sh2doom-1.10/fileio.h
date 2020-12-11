@@ -8,14 +8,7 @@ __BEGIN_DECLS
 
 #define FILE int
 
-#include "block.h"
-
-extern FilesystemData gCdFilesystemData;
-extern FilesystemHeaderTable gCdHeaderTable;
-
-// cd block functions
-void initializeFilesystem();
-
+void initFileSystem();
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static inline FILE* __always_inline 

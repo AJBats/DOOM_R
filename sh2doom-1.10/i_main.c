@@ -25,7 +25,7 @@
 #include "doomdef.h"
 
 #include "d_main.h"
-#include "dummyfile.h"
+#include "fileio.h"
 
 static void _hardware_init(void);
 static void _vblank_out_handler(void *);
@@ -38,6 +38,7 @@ int main()
     dbgio_dev_font_load();
     dbgio_dev_font_load_wait();
 
+    initFileSystem();
 
     D_DoomMain (); 
 

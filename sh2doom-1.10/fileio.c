@@ -2,27 +2,29 @@
 
 #include <yaul.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include "fileio.h"
 
-FilesystemData gCdFilesystemData;
-FilesystemHeaderTable gCdHeaderTable;
+static iso9660_filelist_t sFilelist;
+static iso9660_filelist_entry_t sFilelistEntries[2];
+#define DOOMWAD  0
+#define DOOM2WAD 1
 
-
-void initializeFilesystem()
+// extra the doom.wad and doom2.wad file entries
+void initFileSystem()
 {
-    // CDBlock Initialization.
-    const int stat = initializeCDBlock();
-    assert(stat == 0);
+    iso9660_filelist_t tmpFilelist;
+    iso9660_filelist_read(&tmpFilelist, 6);
 
-    readFilesystem(&sCdFilesystemData);
+    memcpy(&sFilelistEntries[0], &tmpFilelist.entries[4], sizeof(iso9660_filelist_entry_t));
+    memcpy(&sFilelistEntries[1], &tmpFilelist.entries[5], sizeof(iso9660_filelist_entry_t));
 
-    // Create cd entries table (necessary for looking for files).
-    const uint32_t tableSize = getHeaderTableSize(&sCdFilesystemData);
+    sFilelist.entries = sFilelistEntries;
+    sFilelist.entries_pooled_count = tmpFilelist.entries_pooled_count;
+    sFilelist.entries_count = tmpFilelist.entries_count;
 
-    sCdHeaderTable.entries = (FilesystemEntry*) malloc(tableSize);
-
-    fillHeaderTable(&sCdFilesystemData, &sCdHeaderTable);
+    free(tmpFilelist.entries);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
