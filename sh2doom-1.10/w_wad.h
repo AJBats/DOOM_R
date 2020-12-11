@@ -66,7 +66,7 @@ extern	void**		lumpcache;
 extern	lumpinfo_t*	lumpinfo;
 extern	int		numlumps;
 
-void    W_InitMultipleFiles (char** filenames);
+void    W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile);
 void    W_Reload (void);
 
 int	W_CheckNumForName (char* name);

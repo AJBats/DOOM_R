@@ -40,6 +40,7 @@
 #include "m_swap.h"
 #include "i_system.h"
 #include "z_zone.h"
+#include "block.h"
 
 #ifdef __GNUG__
 #pragma implementation "w_wad.h"
@@ -141,98 +142,112 @@ ExtractFileBase
 int			reloadlump;
 char*			reloadname;
 
-
-void W_AddFile (char *filename)
+void W_AddFile(iso9660_filelist_entry_t* wadFile)
 {
-    // AJTODO translate this to reading wad on the CD rom	
+    // AJTODO translate this to reading wad on the CD rom
 
-    wadinfo_t		header;
-    lumpinfo_t*		lump_p;
-    int		i;
-    int			handle;
-    int			length;
-    int			startlump;
-    filelump_t*		fileinfo;
-    filelump_t		singleinfo;
-    int			storehandle;
-    
+    wadinfo_t header;
+    lumpinfo_t *lump_p __unused;
+    //int i;
+    //int handle;
+    int length;
+    int startlump;
+    filelump_t *fileinfo __unused;
+    //filelump_t singleinfo;
+    //int storehandle;
+    FilesystemEntryCursor fileCursor;
+
+    initFileEntryCursor(wadFile, &fileCursor);
+
     // open the file and add to directory
 
+#ifdef AJ_RM
     // handle reload indicator.
     if (filename[0] == '~')
     {
-	filename++;
-	reloadname = filename;
-	reloadlump = numlumps;
+        filename++;
+        reloadname = filename;
+        reloadlump = numlumps;
     }
+#endif
 
-    //if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
-    //{
-	//printf (" couldn't open %s\n",filename);
-	//return;
-    //}
+#ifdef AJ_RM
+    if ((handle = open(filename, O_RDONLY | O_BINARY)) == -1)
+    {
+        printf(" couldn't open %s\n", filename);
+        return;
+    }
+#endif
 
     //printf (" adding %s\n",filename);
     startlump = numlumps;
-	
-    if (strcmpi (filename+strlen(filename)-3 , "wad" ) )
+
+#ifdef AJ_RM
+    if (strcmpi(filename + strlen(filename) - 3, "wad"))
     {
-	// single lump file
-	fileinfo = &singleinfo;
-	singleinfo.filepos = 0;
-	singleinfo.size = LONG(filelength(handle));
-	ExtractFileBase (filename, singleinfo.name);
-	numlumps++;
+        // single lump file
+        fileinfo = &singleinfo;
+        singleinfo.filepos = 0;
+        singleinfo.size = LONG(filelength(handle));
+        ExtractFileBase(filename, singleinfo.name);
+        numlumps++;
     }
-    else 
+    else
+#endif
     {
-	// WAD file    
-	//read (handle, &header, sizeof(header));
-	if (strncmp(header.identification,"IWAD",4))
-	{
-	    // Homebrew levels?
-	    if (strncmp(header.identification,"PWAD",4))
-	    {
-		I_Error ("Wad file %s doesn't have IWAD "
-			 "or PWAD id\n", filename);
-	    }
-	    
-	    // ???modifiedgame = true;		
-	}
-	header.numlumps = LONG(header.numlumps);
-	header.infotableofs = LONG(header.infotableofs);
-	length = header.numlumps*sizeof(filelump_t);
-	fileinfo = alloca (length);
-	//lseek (handle, header.infotableofs, SEEK_SET);
-	//read (handle, fileinfo, length);
-	numlumps += header.numlumps;
+        // WAD file
+        //read (handle, &header, sizeof(header));
+        readFileCursor(&fileCursor, &header, sizeof(header));
+        printf("header %p", &header);
+
+#ifdef AJ_RM
+        if (strncmp(header.identification, "IWAD", 4))
+        {
+            // Homebrew levels?
+            if (strncmp(header.identification, "PWAD", 4))
+            {
+                I_Error("Wad file %s doesn't have IWAD "
+                        "or PWAD id\n",
+                        filename);
+            }
+
+            // ???modifiedgame = true;
+        }
+#endif
+
+        header.numlumps = LONG(header.numlumps);
+        header.infotableofs = LONG(header.infotableofs);
+        length = header.numlumps * sizeof(filelump_t);
+        fileinfo = alloca(length);
+        //lseek (handle, header.infotableofs, SEEK_SET);
+        //read (handle, fileinfo, length);
+        numlumps += header.numlumps;
     }
 
-    
     // Fill in lumpinfo
-    lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
+    lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
     if (!lumpinfo)
-	I_Error ("Couldn't realloc lumpinfo");
+        I_Error("Couldn't realloc lumpinfo");
 
     lump_p = &lumpinfo[startlump];
-	
+
+#ifdef AJ_RM
     storehandle = reloadname ? -1 : handle;
-	
-    for (i=startlump ; i<numlumps ; i++,lump_p++, fileinfo++)
-    {
-	lump_p->handle = storehandle;
-	lump_p->position = LONG(fileinfo->filepos);
-	lump_p->size = LONG(fileinfo->size);
-	strncpy (lump_p->name, fileinfo->name, 8);
-    }
+#endif
+
+    // AJTODO Do we need to figure this out?
+    //for (i = startlump; i < numlumps; i++, lump_p++, fileinfo++)
+    //{
+    //    lump_p->handle = storehandle;
+    //    lump_p->position = LONG(fileinfo->filepos);
+    //    lump_p->size = LONG(fileinfo->size);
+    //    strncpy(lump_p->name, fileinfo->name, 8);
+    //}
 
     //if (reloadname)
-	//    close (handle);
+    //    close (handle);
 }
-
-
-
 
 //
 // W_Reload
@@ -298,7 +313,7 @@ void W_Reload (void)
 // The name searcher looks backwards, so a later file
 //  does override all earlier ones.
 //
-void W_InitMultipleFiles (char** filenames)
+void W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile)
 {	
     int		size;
     
@@ -308,8 +323,7 @@ void W_InitMultipleFiles (char** filenames)
     // will be realloced as lumps are added
     lumpinfo = malloc(1);	
 
-    for ( ; *filenames ; filenames++)
-	W_AddFile (*filenames);
+	W_AddFile (wadFile);
 
     if (!numlumps)
 	I_Error ("W_InitFiles: no files found");
@@ -326,7 +340,7 @@ void W_InitMultipleFiles (char** filenames)
 
 
 
-
+#ifdef AJ_RM
 //
 // W_InitFile
 // Just initialize from a single file.
@@ -339,7 +353,7 @@ void W_InitFile (char* filename)
     names[1] = NULL;
     W_InitMultipleFiles (names);
 }
-
+#endif
 
 
 //

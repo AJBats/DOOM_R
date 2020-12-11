@@ -1027,8 +1027,7 @@ void D_DoomMain (void)
 	}
 	autostart = true;
     }
-#endif
-    
+#endif    
     // init subsystems
     printf ("V_Init: allocate screens.\n");
     V_Init ();
@@ -1039,8 +1038,8 @@ void D_DoomMain (void)
     printf ("Z_Init: Init zone memory allocation daemon. \n");
     Z_Init ();
 
-    printf ("W_Init: Init WADfiles %p.\n", wadfiles);
-    W_InitMultipleFiles (wadfiles);
+    printf ("W_Init: Init WADfiles %p.\n", GetDoomWad());
+    W_InitMultipleFiles (GetDoomWad());
     
 
 #if AJ_RM
