@@ -27,16 +27,25 @@
 #include "d_main.h"
 #include "fileio.h"
 
-static void _hardware_init(void);
+#include "tlsf_lwram_pool.h"
+
+void user_init(void);
 static void _vblank_out_handler(void *);
+
+extern bool _end;
+#define TLSF_POOL_USER_START    ((uint32_t)&_end)
+#define TLSF_POOL_USER_END      (HWRAM(HWRAM_SIZE))
+#define TLSF_POOL_USER_SIZE     (TLSF_POOL_USER_END - TLSF_POOL_USER_START)
 
 int main() 
 {  
-    _hardware_init();
+    dbgio_printf("TLSF_POOL_USER_START %p\n", TLSF_POOL_USER_START);
+    dbgio_printf("TLSF_POOL_USER_END %p\n", TLSF_POOL_USER_END);
+    dbgio_printf("TLSF_POOL_USER_SIZE %d\n", TLSF_POOL_USER_SIZE);
 
-    dbgio_dev_default_init(DBGIO_DEV_VDP2_ASYNC);
-    dbgio_dev_font_load();
-    dbgio_dev_font_load_wait();
+    getinput();
+
+    init_tlsf_lwram();
 
     initFileSystem();
 
@@ -45,7 +54,7 @@ int main()
     return 0;
 } 
 
-static void _hardware_init(void)
+void user_init(void)
 {
     vdp2_tvmd_display_res_set(VDP2_TVMD_INTERLACE_NONE, VDP2_TVMD_HORZ_NORMAL_A,
         VDP2_TVMD_VERT_224);
@@ -56,6 +65,10 @@ static void _hardware_init(void)
     vdp_sync_vblank_out_set(_vblank_out_handler);
 
     cpu_intc_mask_set(0);
+
+    dbgio_dev_default_init(DBGIO_DEV_VDP2_ASYNC);
+    dbgio_dev_font_load();
+    dbgio_dev_font_load_wait();
 
     vdp2_tvmd_display_set();
 }
