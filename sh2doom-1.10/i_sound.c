@@ -83,6 +83,7 @@ void I_SoundDelTimer( void );
 static int flag = 0;
 #endif
 
+#ifdef AJ_RM
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
 //  the size of the 16bit, 2 hardware channel (stereo)
@@ -149,6 +150,8 @@ int		vol_lookup[128*256];
 // Hardware left and right channel volume lookup.
 int*		channelleftvol_lookup[NUM_CHANNELS];
 int*		channelrightvol_lookup[NUM_CHANNELS];
+
+#endif
 
 // AJTODO work to remove this
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
