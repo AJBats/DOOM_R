@@ -1,7 +1,7 @@
 
 #include "block.h"
 
-int getFileContents(iso9660_filelist_entry_t* entry, void *buffer)
+int getFileContents(CDFileHandle entry, void *buffer)
 {
     FilesystemEntryCursor tmpFileCursor;
     tmpFileCursor.cursor = NULL;
@@ -9,13 +9,43 @@ int getFileContents(iso9660_filelist_entry_t* entry, void *buffer)
     return readFileCursor(&tmpFileCursor, buffer, entry->size);
 }
 
-void initFileEntryCursor(iso9660_filelist_entry_t* entry, FilesystemEntryCursor *cursor)
+void initFileEntryCursor(CDFileHandle entry, FilesystemEntryCursor *cursor)
 {
     assert(entry != NULL);
     assert(cursor != NULL);
 
     memset(cursor, 0, sizeof(*cursor));
     cursor->fad = entry->starting_fad;
+}
+
+void lseekFileCursor(CDFileHandle entry, FilesystemEntryCursor* cursor, off_t offset, int whence)
+{
+    assert(entry != NULL);
+    assert(cursor != NULL);
+
+    uint32_t currentFad = cursor->fad;
+
+    if (whence == SEEK_SET && offset > 0)
+    {        
+        cursor->fad = entry->starting_fad + (offset / 2048);
+        cursor->cursor = cursor->sector + (offset % 2048);
+    }
+    else if (whence == SEEK_CUR)
+    {
+        // AJTODO impl
+        assert(false);
+    }
+    else if (whence == SEEK_END)
+    {
+        // AJTODO impl
+        assert(false);
+    }
+
+    if(currentFad != cursor->fad)
+    {
+        // refresh the sector cache
+        cd_block_sector_read(cursor->fad, cursor->sector);
+    }
 }
 
 #define DEBUG_READ_FILE_CURSOR 0

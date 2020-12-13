@@ -142,19 +142,18 @@ ExtractFileBase
 int			reloadlump;
 char*			reloadname;
 
-void W_AddFile(iso9660_filelist_entry_t* wadFile)
+void W_AddFile(CDFileHandle wadFile)
 {
     // AJTODO translate this to reading wad on the CD rom
 
     wadinfo_t header;
-    lumpinfo_t *lump_p __unused;
-    //int i;
+    lumpinfo_t *lump_p = NULL;
     //int handle;
     int length;
     int startlump;
-    filelump_t *fileinfo __unused;
+    filelump_t* fileinfo = NULL;
     //filelump_t singleinfo;
-    //int storehandle;
+    //CDFileHandle storehandle;
     FilesystemEntryCursor fileCursor;
 
     initFileEntryCursor(wadFile, &fileCursor);
@@ -215,17 +214,31 @@ void W_AddFile(iso9660_filelist_entry_t* wadFile)
         }
 #endif
 
+        //printf("header.numlumps %d\n", header.numlumps);
+        //printf("header.infotableofs %d\n", header.infotableofs);
         header.numlumps = LONG(header.numlumps);
         header.infotableofs = LONG(header.infotableofs);
+        printf("header.numlumps %d\n", header.numlumps);
+        printf("header.infotableofs %d\n", header.infotableofs);
         length = header.numlumps * sizeof(filelump_t);
-        fileinfo = alloca(length);
-        //lseek (handle, header.infotableofs, SEEK_SET);
-        //read (handle, fileinfo, length);
+        printf("before malloc length %d\n", length);
+        fileinfo = malloc(length);
+        printf("fileinfo %p\n", fileinfo);
+        printf("pre seek fileCusor %p\n", &fileCursor);
+        lseekFileCursor(wadFile, &fileCursor, header.infotableofs, SEEK_SET);
+        printf("after seek fileCusor %p\n", &fileCursor);
+
+        readFileCursor(&fileCursor, fileinfo, length);
+        printf("fileinfo %p\n", fileinfo);
         numlumps += header.numlumps;
     }
 
     // Fill in lumpinfo
-    lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+    printf("realloc numlumps %d total %d\n", numlumps, numlumps * sizeof(lumpinfo_t));
+    //lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));    
+    lumpinfo = malloc(numlumps * sizeof(lumpinfo_t));
+    //lumpinfo = (void *)LWRAM(0);
+    printf("survved lumpinfo %p\n", lumpinfo);
 
     if (!lumpinfo)
         I_Error("Couldn't realloc lumpinfo");
@@ -236,17 +249,21 @@ void W_AddFile(iso9660_filelist_entry_t* wadFile)
     storehandle = reloadname ? -1 : handle;
 #endif
 
+    printf("starting loop\n");
     // AJTODO Do we need to figure this out?
-    //for (i = startlump; i < numlumps; i++, lump_p++, fileinfo++)
-    //{
-    //    lump_p->handle = storehandle;
-    //    lump_p->position = LONG(fileinfo->filepos);
-    //    lump_p->size = LONG(fileinfo->size);
-    //    strncpy(lump_p->name, fileinfo->name, 8);
-    //}
+    filelump_t* fileIt = fileinfo;
+    for (int i = startlump; i < numlumps; i++, lump_p++, fileIt++)
+    {
+        lump_p->handle = wadFile;
+        lump_p->position = LONG(fileIt->filepos);
+        lump_p->size = LONG(fileIt->size);
+        strncpy(lump_p->name, fileIt->name, 8);
+    }
 
     //if (reloadname)
     //    close (handle);
+    free(fileinfo);
+    printf("finish!\n");
 }
 
 //
@@ -470,7 +487,9 @@ W_ReadLump
 	
     // ??? I_BeginRead ();
 	
-    if (l->handle == -1)
+    // AJTODO you changed handle to be a pointer from a fd int. Address this code?
+    assert(false);
+    if (l->handle == NULL)
     {
 	// reloadable file, so use open / read / close
 	//if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)

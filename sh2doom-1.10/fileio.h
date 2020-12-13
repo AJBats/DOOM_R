@@ -5,14 +5,15 @@
 __BEGIN_DECLS
 
 #include <yaul.h>
+#include "block.h"
 
 #define DEBUG_PRINT 1
 
 #define FILE int
 
 void initFileSystem();
-iso9660_filelist_entry_t* GetDoomWad();
-iso9660_filelist_entry_t* GetDoom2Wad();
+CDFileHandle GetDoomWad();
+CDFileHandle GetDoom2Wad();
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static inline FILE* __always_inline 

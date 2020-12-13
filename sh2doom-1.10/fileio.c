@@ -14,7 +14,7 @@ static iso9660_filelist_entry_t sFilelistEntries[2];
 void initFileSystem()
 {
     iso9660_filelist_t tmpFilelist;
-    iso9660_filelist_read(&tmpFilelist, 6);
+    iso9660_filelist_read(&tmpFilelist, -1);
 
     memcpy(&sFilelistEntries[0], &tmpFilelist.entries[4], sizeof(iso9660_filelist_entry_t));
     memcpy(&sFilelistEntries[1], &tmpFilelist.entries[5], sizeof(iso9660_filelist_entry_t));
@@ -22,12 +22,12 @@ void initFileSystem()
     free(tmpFilelist.entries);
 }
 
-iso9660_filelist_entry_t* GetDoomWad()
+CDFileHandle GetDoomWad()
 {
     return &sFilelistEntries[DOOMWAD];
 }
 
-iso9660_filelist_entry_t* GetDoom2Wad()
+CDFileHandle GetDoom2Wad()
 {
     return &sFilelistEntries[DOOM2WAD];
 }

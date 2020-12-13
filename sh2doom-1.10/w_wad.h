@@ -55,10 +55,10 @@ typedef struct
 //
 typedef struct
 {
-    char	name[8];
-    int		handle;
-    int		position;
-    int		size;
+    char	        name[8];
+    CDFileHandle	handle; // AJTODO get rid of this? I don't think we need it.
+    int		        position;
+    int		        size;
 } lumpinfo_t;
 
 

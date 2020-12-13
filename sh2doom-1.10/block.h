@@ -11,31 +11,18 @@
 
 #define DEBUG_FS 0
 
+typedef iso9660_filelist_entry_t* CDFileHandle;
+
 typedef struct {
   uint8_t sector[2048];
   uint32_t fad;
   uint8_t* cursor;
 } FilesystemEntryCursor;
 
-/**
- * Return file contents from the specified entry.
- * @param entry A file entry in the header table.
- * @param buffer File contents will be returned in this buffer.
- *
- * @return 0 If reading was successful.
- */
-extern int getFileContents(iso9660_filelist_entry_t *entry, void *buffer);
-
-extern void initFileEntryCursor(iso9660_filelist_entry_t* entry, FilesystemEntryCursor* cursor);
-
-/**
- * Return file contents from the specified entry.
- * @param entry A file entry in the header table.
- * @param buffer File contents will be returned in this buffer.
- *
- * @return 0 If reading was successful.
- */
-extern int readFileCursor(FilesystemEntryCursor* fileCursor, void* buffer, uint32_t length);
+int getFileContents(CDFileHandle entry, void *buffer);
+void initFileEntryCursor(CDFileHandle entry, FilesystemEntryCursor* cursor);
+void lseekFileCursor(CDFileHandle entry, FilesystemEntryCursor* cursor, off_t offset, int whence);
+int readFileCursor(FilesystemEntryCursor* fileCursor, void* buffer, uint32_t length);
 
 
 

@@ -10,6 +10,7 @@
 *.sym
 *.map
 *.cue
+doom_r.code-workspace
 ABS.TXT
 BIB.TXT
 CPY.TXT
