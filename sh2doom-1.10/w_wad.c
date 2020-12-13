@@ -47,12 +47,6 @@
 #endif
 #include "w_wad.h"
 
-
-
-// AJTODO hardcode realloc prototype here for now
-extern void * __weak realloc(void *old, size_t new_len);
-
-
 //
 // GLOBALS
 //
@@ -195,9 +189,7 @@ void W_AddFile(CDFileHandle wadFile)
 #endif
     {
         // WAD file
-        //read (handle, &header, sizeof(header));
         readFileCursor(&fileCursor, &header, sizeof(header));
-        printf("header %p", &header);
 
 #ifdef AJ_RM
         if (strncmp(header.identification, "IWAD", 4))
@@ -213,32 +205,17 @@ void W_AddFile(CDFileHandle wadFile)
             // ???modifiedgame = true;
         }
 #endif
-
-        //printf("header.numlumps %d\n", header.numlumps);
-        //printf("header.infotableofs %d\n", header.infotableofs);
         header.numlumps = LONG(header.numlumps);
         header.infotableofs = LONG(header.infotableofs);
-        printf("header.numlumps %d\n", header.numlumps);
-        printf("header.infotableofs %d\n", header.infotableofs);
         length = header.numlumps * sizeof(filelump_t);
-        printf("before malloc length %d\n", length);
         fileinfo = malloc(length);
-        printf("fileinfo %p\n", fileinfo);
-        printf("pre seek fileCusor %p\n", &fileCursor);
         lseekFileCursor(wadFile, &fileCursor, header.infotableofs, SEEK_SET);
-        printf("after seek fileCusor %p\n", &fileCursor);
-
         readFileCursor(&fileCursor, fileinfo, length);
-        printf("fileinfo %p\n", fileinfo);
         numlumps += header.numlumps;
     }
 
     // Fill in lumpinfo
-    printf("realloc numlumps %d total %d\n", numlumps, numlumps * sizeof(lumpinfo_t));
-    //lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));    
-    lumpinfo = malloc(numlumps * sizeof(lumpinfo_t));
-    //lumpinfo = (void *)LWRAM(0);
-    printf("survved lumpinfo %p\n", lumpinfo);
+    lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
     if (!lumpinfo)
         I_Error("Couldn't realloc lumpinfo");
@@ -249,8 +226,6 @@ void W_AddFile(CDFileHandle wadFile)
     storehandle = reloadname ? -1 : handle;
 #endif
 
-    printf("starting loop\n");
-    // AJTODO Do we need to figure this out?
     filelump_t* fileIt = fileinfo;
     for (int i = startlump; i < numlumps; i++, lump_p++, fileIt++)
     {
@@ -262,8 +237,8 @@ void W_AddFile(CDFileHandle wadFile)
 
     //if (reloadname)
     //    close (handle);
+
     free(fileinfo);
-    printf("finish!\n");
 }
 
 //
@@ -348,6 +323,7 @@ void W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile)
     // set up caching
     size = numlumps * sizeof(*lumpcache);
     lumpcache = malloc (size);
+    printf ("lumpcache size %d\n", size);
     
     if (!lumpcache)
 	I_Error ("Couldn't allocate lumpcache");
@@ -558,6 +534,7 @@ W_CacheLumpName
 }
 
 
+#ifdef AJ_RM
 //
 // W_Profile
 //
@@ -618,5 +595,5 @@ void W_Profile (void)
     }
     fclose (f);
 }
-
+#endif
 
