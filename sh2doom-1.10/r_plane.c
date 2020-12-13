@@ -45,15 +45,15 @@ planefunction_t		ceilingfunc;
 //
 
 // Here comes the obnoxious "visplane".
-#define MAXVISPLANES	128
-visplane_t		visplanes[MAXVISPLANES];
+//visplane_t		visplanes[MAXVISPLANES]; // AJ moved to lwram
+visplane_t*     visplanes;
 visplane_t*		lastvisplane;
 visplane_t*		floorplane;
 visplane_t*		ceilingplane;
 
 // ?
-#define MAXOPENINGS	SCREENWIDTH*64
-short			openings[MAXOPENINGS];
+//short			openings[MAXOPENINGS]; // AJ moved to lwram
+short*          openings;
 short*			lastopening;
 
 

@@ -933,7 +933,7 @@ void I_InitGraphics(void)
     				8,
     				ZPixmap,
     				0,
-    				(char*)malloc(X_width * X_height),
+    				(char*)lwram_malloc(X_width * X_height),
     				X_width, X_height,
     				8,
     				X_width );
@@ -943,7 +943,7 @@ void I_InitGraphics(void)
     if (multiply == 1)
 	screens[0] = (unsigned char *) (image->data);
     else
-	screens[0] = (unsigned char *) malloc (SCREENWIDTH * SCREENHEIGHT);
+	screens[0] = (unsigned char *) lwram_malloc (SCREENWIDTH * SCREENHEIGHT);
 #endif
 }
 

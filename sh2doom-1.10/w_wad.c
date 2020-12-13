@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include <alloca.h>
+#include "tlsf_lwram_pool.h"
 #include "doomtype.h"
 #include "m_swap.h"
 #include "i_system.h"
@@ -208,14 +209,14 @@ void W_AddFile(CDFileHandle wadFile)
         header.numlumps = LONG(header.numlumps);
         header.infotableofs = LONG(header.infotableofs);
         length = header.numlumps * sizeof(filelump_t);
-        fileinfo = malloc(length);
+        fileinfo = lwram_malloc(length);
         lseekFileCursor(wadFile, &fileCursor, header.infotableofs, SEEK_SET);
         readFileCursor(&fileCursor, fileinfo, length);
         numlumps += header.numlumps;
     }
 
     // Fill in lumpinfo
-    lumpinfo = realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
+    lumpinfo = lwram_realloc(lumpinfo, numlumps * sizeof(lumpinfo_t));
 
     if (!lumpinfo)
         I_Error("Couldn't realloc lumpinfo");
@@ -313,7 +314,7 @@ void W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile)
     numlumps = 0;
 
     // will be realloced as lumps are added
-    lumpinfo = malloc(1);	
+    lumpinfo = lwram_malloc(1);	
 
 	W_AddFile (wadFile);
 
@@ -322,7 +323,7 @@ void W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile)
     
     // set up caching
     size = numlumps * sizeof(*lumpcache);
-    lumpcache = malloc (size);
+    lumpcache = lwram_malloc (size);
     printf ("lumpcache size %d\n", size);
     
     if (!lumpcache)

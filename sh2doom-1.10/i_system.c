@@ -28,6 +28,8 @@
 //#include <sys/time.h>
 //#include <unistd.h>
 
+#include "tlsf_lwram_pool.h"
+
 #include "doomdef.h"
 #include "m_misc.h"
 #include "i_video.h"
@@ -141,7 +143,7 @@ byte*	I_AllocLow(int length)
 {
     byte*	mem;
         
-    mem = (byte *)malloc (length);
+    mem = (byte *)lwram_malloc (length);
     memset (mem,0,length);
     return mem;
 }

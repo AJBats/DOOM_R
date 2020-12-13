@@ -479,7 +479,8 @@ typedef struct
 
 } visplane_t;
 
-
+#define MAXVISPLANES	128
+#define MAXOPENINGS	SCREENWIDTH*64
 
 
 #endif

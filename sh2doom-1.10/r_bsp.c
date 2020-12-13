@@ -47,7 +47,8 @@ line_t*		linedef;
 sector_t*	frontsector;
 sector_t*	backsector;
 
-drawseg_t	drawsegs[MAXDRAWSEGS];
+//drawseg_t	drawsegs[MAXDRAWSEGS];
+drawseg_t*  drawsegs;
 drawseg_t*	ds_p;
 
 

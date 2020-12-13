@@ -44,6 +44,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+#include "tlsf_lwram_pool.h"
+
 
 #include "doomdef.h"
 #include "doomstat.h"
@@ -554,7 +556,7 @@ void D_AddFile (char *file)
     for (numwadfiles = 0 ; wadfiles[numwadfiles] ; numwadfiles++)
 	;
 
-    newfile = malloc (strlen(file)+1);
+    newfile = lwram_malloc (strlen(file)+1);
     strcpy (newfile, file);
 	
     wadfiles[numwadfiles] = newfile;
@@ -587,32 +589,32 @@ void IdentifyVersion (void)
 	doomwaddir = ".";
 
     // Commercial.
-    doom2wad = malloc(strlen(doomwaddir)+1+9+1);
+    doom2wad = lwram_malloc(strlen(doomwaddir)+1+9+1);
     sprintf(doom2wad, "%s/doom2.wad", doomwaddir);
 
     // Retail.
-    doomuwad = malloc(strlen(doomwaddir)+1+8+1);
+    doomuwad = lwram_malloc(strlen(doomwaddir)+1+8+1);
     sprintf(doomuwad, "%s/doomu.wad", doomwaddir);
     
     // Registered.
-    doomwad = malloc(strlen(doomwaddir)+1+8+1);
+    doomwad = lwram_malloc(strlen(doomwaddir)+1+8+1);
     sprintf(doomwad, "%s/doom.wad", doomwaddir);
     
     // Shareware.
-    doom1wad = malloc(strlen(doomwaddir)+1+9+1);
+    doom1wad = lwram_malloc(strlen(doomwaddir)+1+9+1);
     sprintf(doom1wad, "%s/doom1.wad", doomwaddir);
 
      // Bug, dear Shawn.
-    // Insufficient malloc, caused spurious realloc errors.
-    plutoniawad = malloc(strlen(doomwaddir)+1+/*9*/12+1);
+    // Insufficient lwram_malloc, caused spurious realloc errors.
+    plutoniawad = lwram_malloc(strlen(doomwaddir)+1+/*9*/12+1);
     sprintf(plutoniawad, "%s/plutonia.wad", doomwaddir);
 
-    tntwad = malloc(strlen(doomwaddir)+1+9+1);
+    tntwad = lwram_malloc(strlen(doomwaddir)+1+9+1);
     sprintf(tntwad, "%s/tnt.wad", doomwaddir);
 
 
     // French stuff.
-    doom2fwad = malloc(strlen(doomwaddir)+1+10+1);
+    doom2fwad = lwram_malloc(strlen(doomwaddir)+1+10+1);
     sprintf(doom2fwad, "%s/doom2f.wad", doomwaddir);
 
     home = getenv("HOME");
@@ -758,7 +760,7 @@ void FindResponseFile (void)
 	    fseek (handle,0,SEEK_END);
 	    size = ftell(handle);
 	    fseek (handle,0,SEEK_SET);
-	    file = malloc (size);
+	    file = lwram_malloc (size);
 	    fread (file,size,1,handle);
 	    fclose (handle);
 			
@@ -767,7 +769,7 @@ void FindResponseFile (void)
 		moreargs[index++] = myargv[k];
 			
 	    firstargv = myargv[0];
-	    myargv = malloc(sizeof(char *)*MAXARGVS);
+	    myargv = lwram_malloc(sizeof(char *)*MAXARGVS);
 	    memset(myargv,0,sizeof(char *)*MAXARGVS);
 	    myargv[0] = firstargv;
 			

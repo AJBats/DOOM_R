@@ -23,12 +23,15 @@
 
 #include <yaul.h>
 #include "doomdef.h"
-
 #include "d_main.h"
+#include "r_defs.h"
+#include "r_state.h"
+#include "r_bsp.h"
 #include "fileio.h"
 
 #include "tlsf_lwram_pool.h"
 
+void static_allocations();
 void user_init(void);
 static void _vblank_out_handler(void *);
 
@@ -47,12 +50,29 @@ int main()
 
     init_tlsf_lwram();
 
+    static_allocations();
+
     initFileSystem();
 
     D_DoomMain (); 
 
     return 0;
 } 
+
+void static_allocations()
+{
+    extern visplane_t* visplanes; //visplane_t visplanes[MAXVISPLANES]
+    visplanes = lwram_malloc(sizeof(visplane_t) * MAXVISPLANES);
+
+    extern short* openings; //short openings[MAXOPENINGS]
+    openings = lwram_malloc(sizeof(short) * MAXOPENINGS);
+
+    //int viewangletox[FINEANGLES/2]
+    viewangletox = lwram_malloc(sizeof(int) * (FINEANGLES/2));
+
+    //drawseg_t	drawsegs[MAXDRAWSEGS];
+    drawsegs = lwram_malloc(sizeof(drawseg_t) * MAXDRAWSEGS);
+}
 
 void user_init(void)
 {
