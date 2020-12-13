@@ -243,8 +243,10 @@ extern  int		maxammo[NUMAMMO];
 //
 
 // File handling stuff.
+#ifdef AJ_RM
 extern	char		basedefault[1024];
 extern  FILE*		debugfile;
+#endif
 
 // if true, load all graphics at level load
 extern  boolean         precache;

@@ -61,9 +61,6 @@
 
 #include "m_menu.h"
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-
 extern patch_t*		hu_font[HU_FONTSIZE];
 extern boolean		message_dontfuckwithme;
 
@@ -596,7 +593,7 @@ void M_LoadSelect(int choice)
 // Selected from DOOM menu
 //
 
-void M_LoadGame (int choice)
+void M_LoadGame (int choice __unused)
 {
     if (netgame)
     {
@@ -660,7 +657,7 @@ void M_SaveSelect(int choice)
 //
 // Selected from DOOM menu
 //
-void M_SaveGame (int choice)
+void M_SaveGame (int choice __unused)
 {
     if (!usergame)
     {
@@ -812,7 +809,7 @@ void M_DrawSound(void)
 		 16,snd_MusicVolume);
 }
 
-void M_Sound(int choice)
+void M_Sound(int choice __unused)
 {
     M_SetupNextMenu(&SoundDef);
 }
@@ -874,7 +871,7 @@ void M_DrawNewGame(void)
     V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_SKILL",PU_CACHE));
 }
 
-void M_NewGame(int choice)
+void M_NewGame(int choice __unused)
 {
     if (netgame && !demoplayback)
     {
@@ -969,7 +966,7 @@ void M_DrawOptions(void)
 		 9,screenSize);
 }
 
-void M_Options(int choice)
+void M_Options(int choice __unused)
 {
     M_SetupNextMenu(&OptionsDef);
 }
@@ -979,7 +976,7 @@ void M_Options(int choice)
 //
 //      Toggle messages on/off
 //
-void M_ChangeMessages(int choice)
+void M_ChangeMessages(int choice __unused)
 {
     // warning: unused parameter `int choice'
     choice = 0;
@@ -1007,7 +1004,7 @@ void M_EndGameResponse(int ch)
     D_StartTitle ();
 }
 
-void M_EndGame(int choice)
+void M_EndGame(int choice __unused)
 {
     choice = 0;
     if (!usergame)
@@ -1031,19 +1028,19 @@ void M_EndGame(int choice)
 //
 // M_ReadThis
 //
-void M_ReadThis(int choice)
+void M_ReadThis(int choice __unused)
 {
     choice = 0;
     M_SetupNextMenu(&ReadDef1);
 }
 
-void M_ReadThis2(int choice)
+void M_ReadThis2(int choice __unused)
 {
     choice = 0;
     M_SetupNextMenu(&ReadDef2);
 }
 
-void M_FinishReadThis(int choice)
+void M_FinishReadThis(int choice __unused)
 {
     choice = 0;
     M_SetupNextMenu(&MainDef);
@@ -1099,7 +1096,7 @@ void M_QuitResponse(int ch)
 
 
 
-void M_QuitDOOM(int choice)
+void M_QuitDOOM(int choice __unused)
 {
   // We pick index 0 which is language sensitive,
   //  or one at random, between 1 and maximum number.
@@ -1132,7 +1129,7 @@ void M_ChangeSensitivity(int choice)
 
 
 
-void M_ChangeDetail(int choice)
+void M_ChangeDetail(int choice __unused)
 {
     choice = 0;
     detailLevel = 1 - detailLevel;
@@ -1870,6 +1867,7 @@ void M_Init (void)
     switch ( gamemode )
     {
       case commercial:
+      printf("commercial gamemode\n");
 	// This is used because DOOM 2 had only one HELP
         //  page. I use CREDIT as second page now, but
 	//  kept this hack for educational purposes.
@@ -1897,6 +1895,4 @@ void M_Init (void)
     
 }
 
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
 

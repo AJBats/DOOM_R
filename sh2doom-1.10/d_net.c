@@ -163,6 +163,7 @@ HSendPacket
     doomcom->remotenode = node;
     doomcom->datalength = NetbufferSize ();
 	
+#ifdef AJ_RM
     if (debugfile)
     {
 	int		i;
@@ -181,6 +182,7 @@ HSendPacket
 
 	fprintf (debugfile,"\n");
     }
+#endif
 
     I_NetCmd ();
 }
@@ -213,18 +215,23 @@ boolean HGetPacket (void)
 
     if (doomcom->datalength != NetbufferSize ())
     {
+#ifdef AJ_RM
 	if (debugfile)
 	    fprintf (debugfile,"bad packet length %i\n",doomcom->datalength);
+#endif
 	return false;
     }
 	
     if (NetbufferChecksum () != (netbuffer->checksum&NCMD_CHECKSUM) )
     {
+#ifdef AJ_RM
 	if (debugfile)
 	    fprintf (debugfile,"bad packet checksum\n");
+#endif
 	return false;
     }
 
+#ifdef AJ_RM
     if (debugfile)
     {
 	int		realretrans;
@@ -249,6 +256,7 @@ boolean HGetPacket (void)
 	    fprintf (debugfile,"\n");
 	}
     }
+#endif
     return true;	
 }
 
@@ -305,8 +313,10 @@ void GetPackets (void)
 	     && (netbuffer->checksum & NCMD_RETRANSMIT) )
 	{
 	    resendto[netnode] = ExpandTics(netbuffer->retransmitfrom);
+#ifdef AJ_RM
 	    if (debugfile)
 		fprintf (debugfile,"retransmit from %i\n", resendto[netnode]);
+#endif
 	    resendcount[netnode] = RESENDCOUNT;
 	}
 	else
@@ -318,10 +328,12 @@ void GetPackets (void)
 			
 	if (realend < nettics[netnode])
 	{
+#ifdef AJ_RM
 	    if (debugfile)
 		fprintf (debugfile,
 			 "out of order packet (%i + %i)\n" ,
 			 realstart,netbuffer->numtics);
+#endif
 	    continue;
 	}
 	
@@ -329,10 +341,12 @@ void GetPackets (void)
 	if (realstart > nettics[netnode])
 	{
 	    // stop processing until the other system resends the missed tics
+#ifdef AJ_RM
 	    if (debugfile)
 		fprintf (debugfile,
 			 "missed tics from %i (%i - %i)\n",
 			 netnode, realstart, nettics[netnode]);
+#endif
 	    remoteresend[netnode] = true;
 	    continue;
 	}
@@ -603,8 +617,10 @@ void D_QuitNetGame (void)
 {
     int             i, j;
 	
+#ifdef AJ_RM
     if (debugfile)
 	fclose (debugfile);
+#endif
 		
     if (!netgame || !usergame || consoleplayer == -1 || demoplayback)
 	return;
@@ -678,10 +694,12 @@ void TryRunTics (void)
 		
     frameon++;
 
+#ifdef AJ_RM
     if (debugfile)
 	fprintf (debugfile,
 		 "=======real: %i  avail: %i  game: %i\n",
 		 realtics, availabletics,counts);
+#endif
 
     if (!demoplayback)
     {	
@@ -739,8 +757,8 @@ void TryRunTics (void)
 	{
 	    if (gametic/ticdup > lowtic)
 		I_Error ("gametic>lowtic");
-	    if (advancedemo)
-		D_DoAdvanceDemo ();
+	    //if (advancedemo) AJ_RM
+		//D_DoAdvanceDemo ();
 	    M_Ticker ();
 	    G_Ticker ();
 	    gametic++;

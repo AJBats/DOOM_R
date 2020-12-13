@@ -1682,7 +1682,7 @@ boolean G_CheckDemoStatus (void)
 	fastparm = false;
 	nomonsters = false;
 	consoleplayer = 0;
-	D_AdvanceDemo (); 
+	//D_AdvanceDemo (); AJ_RM
 	return true; 
     } 
  

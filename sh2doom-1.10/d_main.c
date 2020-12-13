@@ -117,16 +117,15 @@ int             startepisode;
 int		startmap;
 boolean		autostart;
 
+#ifdef AJ_RM
 FILE*		debugfile;
 
 boolean		advancedemo;
 
-
-
-
 char		wadfile[1024];		// primary wad file
 char		mapdir[1024];           // directory of development maps
 char		basedefault[1024];      // default file
+#endif
 
 
 void D_CheckNetGame (void);
@@ -357,8 +356,8 @@ extern  boolean         demorecording;
 
 void D_DoomLoop (void)
 {
-    if (demorecording)
-	G_BeginRecording ();
+    //if (demorecording) AJ_RM
+	//G_BeginRecording ();
 		
 #ifdef AJ_RM
     if (M_CheckParm ("-debugfile"))
@@ -383,8 +382,8 @@ void D_DoomLoop (void)
 	    I_StartTic ();
 	    D_ProcessEvents ();
 	    G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
-	    if (advancedemo)
-		D_DoAdvanceDemo ();
+	    //if (advancedemo) AJ_RM
+		//D_DoAdvanceDemo ();
 	    M_Ticker ();
 	    G_Ticker ();
 	    gametic++;
@@ -428,8 +427,8 @@ char                    *pagename;
 //
 void D_PageTicker (void)
 {
-    if (--pagetic < 0)
-	D_AdvanceDemo ();
+    //if (--pagetic < 0) AJ_RM
+	//D_AdvanceDemo ();
 }
 
 
@@ -442,7 +441,7 @@ void D_PageDrawer (void)
     V_DrawPatch (0,0, 0, W_CacheLumpName(pagename, PU_CACHE));
 }
 
-
+#ifdef AJ_RM
 //
 // D_AdvanceDemo
 // Called after each demo or intro demosequence finishes
@@ -451,8 +450,9 @@ void D_AdvanceDemo (void)
 {
     advancedemo = true;
 }
+#endif
 
-
+#ifdef AJ_RM
 //
 // This cycles through the demo sequences.
 // FIXME - version dependend demo numbers?
@@ -522,7 +522,7 @@ void D_AdvanceDemo (void)
 	break;
     }
 }
-
+#endif
 
 
 //
@@ -532,7 +532,7 @@ void D_StartTitle (void)
 {
     gameaction = ga_nothing;
     demosequence = -1;
-    D_AdvanceDemo ();
+    //D_AdvanceDemo (); AJ_RM
 }
 
 
@@ -1113,6 +1113,7 @@ void D_DoomMain (void)
     }
 #endif
 
+	clearscreen();
     printf ("M_Init: Init miscellaneous info.\n");
     M_Init ();
 

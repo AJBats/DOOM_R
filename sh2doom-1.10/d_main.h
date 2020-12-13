@@ -58,7 +58,7 @@ void D_PostEvent (event_t* ev);
 //
 void D_PageTicker (void);
 void D_PageDrawer (void);
-void D_AdvanceDemo (void);
+//void D_AdvanceDemo (void); AJ_RM
 void D_StartTitle (void);
 
 #endif
