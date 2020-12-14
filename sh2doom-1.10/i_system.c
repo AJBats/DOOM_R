@@ -46,8 +46,10 @@
 
 
 
-int	mb_used = 5;
-
+extern bool _end;
+#define TLSF_POOL_USER_START    ((uint32_t)&_end)
+#define TLSF_POOL_USER_END      (HWRAM(HWRAM_SIZE))
+#define TLSF_POOL_USER_SIZE     (TLSF_POOL_USER_END - TLSF_POOL_USER_START)
 
 ticcmd_t	emptycmd;
 ticcmd_t*	I_BaseTiccmd(void)
@@ -58,13 +60,13 @@ ticcmd_t*	I_BaseTiccmd(void)
 
 int  I_GetHeapSize (void)
 {
-    return mb_used*100*1024;
+    return TLSF_POOL_USER_SIZE;
 }
 
 byte* I_ZoneBase (int*	size)
 {
-    *size = mb_used*100*1024;
-    return (byte *) malloc (*size);
+    *size = TLSF_POOL_USER_SIZE;
+    return (byte *) TLSF_POOL_USER_START;
 }
 
 

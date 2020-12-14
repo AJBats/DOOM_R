@@ -35,19 +35,8 @@ void static_allocations();
 void user_init(void);
 static void _vblank_out_handler(void *);
 
-extern bool _end;
-#define TLSF_POOL_USER_START    ((uint32_t)&_end)
-#define TLSF_POOL_USER_END      (HWRAM(HWRAM_SIZE))
-#define TLSF_POOL_USER_SIZE     (TLSF_POOL_USER_END - TLSF_POOL_USER_START)
-
 int main() 
 {  
-    dbgio_printf("TLSF_POOL_USER_START %p\n", TLSF_POOL_USER_START);
-    dbgio_printf("TLSF_POOL_USER_END %p\n", TLSF_POOL_USER_END);
-    dbgio_printf("TLSF_POOL_USER_SIZE %d\n", TLSF_POOL_USER_SIZE);
-
-    getinput();
-
     init_tlsf_lwram();
 
     static_allocations();
