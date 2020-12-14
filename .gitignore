@@ -10,6 +10,7 @@
 *.sym
 *.map
 *.cue
+*.xlsx
 doom_r.code-workspace
 ABS.TXT
 BIB.TXT
