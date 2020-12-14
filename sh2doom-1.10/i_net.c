@@ -264,7 +264,7 @@ void I_InitNetwork (void)
     int			p;
     struct hostent*	hostentry;	// host information entry
 	
-    doomcom = malloc (sizeof (*doomcom) );
+    doomcom = lwram_malloc (sizeof (*doomcom) );
     memset (doomcom, 0, sizeof(*doomcom) );
     
     // set up for network

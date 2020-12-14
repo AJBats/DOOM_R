@@ -394,7 +394,7 @@ void M_LoadDefaults (void)
 		    // get a string default
 		    isstring = true;
 		    len = strlen(strparm);
-		    newstring = (char *) malloc(len);
+		    newstring = (char *) lwram_malloc(len);
 		    strparm[len-1] = 0;
 		    strcpy(newstring, strparm+1);
 		}
