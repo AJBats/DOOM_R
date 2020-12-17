@@ -239,7 +239,7 @@ void W_AddFile(CDFileHandle wadFile)
     //if (reloadname)
     //    close (handle);
 
-    free(fileinfo);
+    lwram_free(fileinfo);
 }
 
 //
