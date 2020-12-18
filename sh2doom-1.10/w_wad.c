@@ -236,6 +236,7 @@ void W_AddFile(CDFileHandle wadFile)
         strncpy(lump_p->name, fileIt->name, 8);
     }
 
+    debug_phase1("fileinfo %p", fileinfo);
     //if (reloadname)
     //    close (handle);
 
@@ -324,7 +325,7 @@ void W_InitMultipleFiles (iso9660_filelist_entry_t* wadFile)
     // set up caching
     size = numlumps * sizeof(*lumpcache);
     lumpcache = lwram_malloc (size);
-    printf ("lumpcache size %d\n", size);
+    debug_phase1 ("lumpcache size %d\n", size);
     
     if (!lumpcache)
 	I_Error ("Couldn't allocate lumpcache");
@@ -455,7 +456,7 @@ W_ReadLump
 
     int		c;
     lumpinfo_t*	l;
-    //int		handle;
+    FilesystemEntryCursor fileCursor;
 	
     if (lump >= numlumps)
 	I_Error ("W_ReadLump: %i >= numlumps",lump);
@@ -466,25 +467,20 @@ W_ReadLump
 	
     // AJTODO you changed handle to be a pointer from a fd int. Address this code?
     assert(false);
-    if (l->handle == NULL)
-    {
+    //if (l->handle == NULL)
+    //{
 	// reloadable file, so use open / read / close
 	//if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
-    }
-    else
-	//handle = l->handle;
+	    //I_Error ("W_ReadLump: couldn't open %s",reloadname);
+    //}
 		
-    //lseek (handle, l->position, SEEK_SET);
-    //c = read (handle, dest, l->size);
+    initFileEntryCursor(l->handle, &fileCursor);
+    lseekFileCursor(l->handle, &fileCursor, l->position, SEEK_SET);
+    c = readFileCursor(&fileCursor, dest, l->size);
 
-    c = 0; // AJTODO silencing compiler. Remove when we actually implement this function.
     if (c < l->size)
 	I_Error ("W_ReadLump: only read %i of %i on lump %i",
-		 c,l->size,lump);	
-
-    //if (l->handle == -1)
-	//close (handle);
+		 c,l->size,lump);
 		
     // ??? I_EndRead ();
 }
