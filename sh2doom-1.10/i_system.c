@@ -158,27 +158,18 @@ extern boolean demorecording;
 
 void I_Error (char *error, ...)
 {
-    // AJTODO Do something here?
-    error++;
-#ifdef AJ_RM
-    va_list	argptr;
+    char buffer[2048];
+    va_list args;
 
-    // Message first.
-    va_start (argptr,error);
-    fprintf (stderr, "Error: ");
-    vfprintf (stderr,error,argptr);
-    fprintf (stderr, "\n");
-    va_end (argptr);
+    va_start(args, error);
+    (void)vsprintf(buffer, error, args);
 
-    fflush( stderr );
+    //do something with the error
+    clearscreen();
+    dbgio_puts("******** ERROR ********\n");
+    dbgio_puts(buffer);
 
-    // Shutdown. Here might be other errors.
-    if (demorecording)
-	G_CheckDemoStatus();
+    va_end (args);
 
-    D_QuitNetGame ();
-    I_ShutdownGraphics();
-    
-    exit(-1);
-#endif
+    getinput();
 }
