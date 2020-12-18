@@ -354,7 +354,7 @@ void D_Display (void)
 //
 //  D_DoomLoop
 //
-extern  boolean         demorecording;
+//extern  boolean         demorecording;
 
 void D_DoomLoop (void)
 {
@@ -817,7 +817,7 @@ void D_DoomMain (void)
 	
     modifiedgame = false;
 
-	gamemode = commercial;
+	gamemode = registered;
 
 	// I just dont care about this code :/
 #ifdef AJ_RM
@@ -1119,16 +1119,19 @@ void D_DoomMain (void)
     printf ("M_Init: Init miscellaneous info.\n");
     M_Init ();
 
-    printf ("R_Init: Init DOOM refresh daemon - ");
+    printf ("R_Init: Init DOOM refresh daemon - \n");
     R_Init ();
 
     printf ("\nP_Init: Init Playloop state.\n");
+	getinput();
     P_Init ();
 
     printf ("I_Init: Setting up machine state.\n");
+	getinput();
     I_Init ();
 
     printf ("D_CheckNetGame: Checking network game status.\n");
+	getinput();
     D_CheckNetGame ();
 
     printf ("S_Init: Setting up sound.\n");
