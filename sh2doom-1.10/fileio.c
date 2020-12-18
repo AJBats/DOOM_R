@@ -14,12 +14,17 @@ static iso9660_filelist_entry_t sFilelistEntries[2];
 void initFileSystem()
 {
     iso9660_filelist_t tmpFilelist;
-    iso9660_filelist_read(&tmpFilelist, -1);
+    iso9660_filelist_entry_t tmpEntries[6];
+
+    tmpFilelist.entries = tmpEntries;    
+    
+    // change this to stack memory
+    assert(false);
+
+    iso9660_filelist_read(&tmpFilelist, 6);
 
     memcpy(&sFilelistEntries[0], &tmpFilelist.entries[4], sizeof(iso9660_filelist_entry_t));
     memcpy(&sFilelistEntries[1], &tmpFilelist.entries[5], sizeof(iso9660_filelist_entry_t));
-
-    free(tmpFilelist.entries);
 }
 
 CDFileHandle GetDoomWad()
@@ -32,27 +37,70 @@ CDFileHandle GetDoom2Wad()
     return &sFilelistEntries[DOOM2WAD];
 }
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-int printf(const char * __restrict fmt, ...)
+int internal_printf(const char * __restrict fmt, va_list args)
 {
     char buffer[2048];
-    int retcode = 0;
-    va_list args;
-
-    va_start(args, fmt);
-    (void)vsprintf(buffer, fmt, args);
+    int retcode = vsprintf(buffer, fmt, args);
 
     //do something with the error
-    dbgio_puts(buffer);
-
-    retcode = strlen(buffer);
-
-    va_end (args);
-
-    getinput();
+    dbgio_puts(buffer);    
 
     return retcode; 
 }
+
+int debug_phase1(const char * __restrict fmt __unused, ...)
+{
+#if DEBUG_PHASE_1 == 1
+    va_list args;
+    va_start(args, fmt);
+    int retVal = internal_printf(fmt, args);
+    va_end (args);
+    getinput();
+    return retVal;
+#else
+    return 0;
+#endif
+}
+
+int debug_phase2(const char * __restrict fmt __unused, ...)
+{
+#if DEBUG_PHASE_2 == 1
+    va_list args;
+    va_start(args, fmt);
+    int retVal = internal_printf(fmt, args);
+    va_end (args);
+    getinput();
+    return retVal;
+#else
+    return 0;
+#endif
+}
+
+int debug_phase3(const char * __restrict fmt __unused, ...)
+{
+#if DEBUG_PHASE_3 == 1
+    va_list args;
+    va_start(args, fmt);
+    int retVal = internal_printf(fmt, args);
+    va_end (args);
+    getinput();
+    return retVal;
+#else
+    return 0;
+#endif
+}
+
+int printf(const char * __restrict fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    int retVal = internal_printf(fmt, args);
+    va_end (args);
+    dbgio_flush();
+    vdp_sync();
+    return retVal;
+}
+
 
 #if DEBUG_PRINT == 1
 void clearscreen()
@@ -94,5 +142,3 @@ void getinput()
     }
 }
 #endif
-
-#pragma GCC diagnostic pop // "-Wunused-parameter"
