@@ -56,6 +56,7 @@ int readFileCursor(FilesystemEntryCursor *fileCursor, void *buffer, uint32_t len
 
     uint8_t* dstBuffer = (uint8_t *)buffer;
     uint32_t missingBytes = length;
+    uint32_t bytesRead = 0;
 
 #if DEBUG_READ_FILE_CURSOR == 1
     clearscreen();
@@ -85,7 +86,7 @@ int readFileCursor(FilesystemEntryCursor *fileCursor, void *buffer, uint32_t len
 #endif
             memcpy(dstBuffer, fileCursor->cursor, missingBytes);
             fileCursor->cursor += missingBytes;
-            return 0;
+            return missingBytes;
         }
         else
         {
@@ -100,6 +101,7 @@ int readFileCursor(FilesystemEntryCursor *fileCursor, void *buffer, uint32_t len
             memcpy(dstBuffer, fileCursor->cursor, remainingBuffer);
             dstBuffer += remainingBuffer;
             missingBytes -= remainingBuffer;
+            bytesRead += remainingBuffer;
             fileCursor->cursor = NULL;
 
             // Jump to next fad.
@@ -119,6 +121,7 @@ int readFileCursor(FilesystemEntryCursor *fileCursor, void *buffer, uint32_t len
             memcpy(dstBuffer, fileCursor->sector, 2048);
             dstBuffer += 2048;
             missingBytes -= 2048;
+            bytesRead += 2048;
             fileCursor->cursor = NULL;
 
             // Jump to next fad.
@@ -127,10 +130,12 @@ int readFileCursor(FilesystemEntryCursor *fileCursor, void *buffer, uint32_t len
         else
         {
             memcpy(dstBuffer, fileCursor->sector, missingBytes);
-            fileCursor->cursor = fileCursor->sector + missingBytes;
+            fileCursor->cursor = fileCursor->sector + missingBytes;            
+            bytesRead += missingBytes;
             missingBytes = 0;
+            
         }
     }
 
-    return 0;
+    return bytesRead;
 }
