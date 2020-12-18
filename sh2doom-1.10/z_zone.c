@@ -94,7 +94,7 @@ void Z_Init (void)
 
     mainzone = (memzone_t *)I_ZoneBase (&size);
     mainzone->size = size;
-    printf("mainzone %p size %d\n", mainzone, size);
+    debug_phase1("mainzone %p size %d\n", mainzone, size);
 
     // set the entire zone to one free block
     mainzone->blocklist.next =

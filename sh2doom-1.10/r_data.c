@@ -310,7 +310,9 @@ void R_GenerateLookup (int texnum)
     //  that are covered by more than one patch.
     // Fill in the lump / offset, so columns
     //  with only a single patch are all done.
+    //debug_phase2("prealloca %d\n", texture->width);
     patchcount = (byte *)alloca (texture->width);
+    //debug_phase2("patchcount %p\n", patchcount);
     memset (patchcount, 0, texture->width);
     patch = texture->patches;
 		
@@ -431,15 +433,17 @@ void R_InitTextures (void)
     
     int			temp1;
     int			temp2;
-    int			temp3;
+    int			temp3 __unused;
 
     
     // Load the patch names from pnames.lmp.
     name[8] = 0;	
-    names = W_CacheLumpName ("PNAMES", PU_STATIC);
-    nummappatches = LONG ( *((int *)names) );
+    names = W_CacheLumpName ("PNAMES", PU_STATIC);    
+    nummappatches = LONG ( *((int *)names) );    
     name_p = names+4;
+    debug_phase2("alloca size %d\n", nummappatches*sizeof(*patchlookup));
     patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+    debug_phase2("patchlookup %p\n", patchlookup);
     
     for (i=0 ; i<nummappatches ; i++)
     {
@@ -484,6 +488,7 @@ void R_InitTextures (void)
     temp1 = W_GetNumForName ("S_START");  // P_???????
     temp2 = W_GetNumForName ("S_END") - 1;
     temp3 = ((temp2-temp1+63)/64) + ((numtextures+63)/64);
+    
     printf("[");
     for (i = 0; i < temp3; i++)
 	printf(" ");
@@ -491,11 +496,14 @@ void R_InitTextures (void)
     for (i = 0; i < temp3; i++)
 	printf("\x8");
     printf("\x8\x8\x8\x8\x8\x8\x8\x8\x8\x8");	
-	
+
     for (i=0 ; i<numtextures ; i++, directory++)
     {
 	if (!(i&63))
 	    printf (".");
+
+
+    //debug_phase2("wherehangup2\n");
 
 	if (i == numtextures1)
 	{
@@ -504,6 +512,8 @@ void R_InitTextures (void)
 	    maxoff = maxoff2;
 	    directory = maptex+1;
 	}
+
+    //debug_phase2("wherehangup3\n");
 		
 	offset = LONG(*directory);
 
@@ -516,6 +526,8 @@ void R_InitTextures (void)
 	    Z_Malloc (sizeof(texture_t)
 		      + sizeof(texpatch_t)*(SHORT(mtexture->patchcount)-1),
 		      PU_STATIC, 0);
+
+    //debug_phase2("wherehangup4\n");
 	
 	texture->width = SHORT(mtexture->width);
 	texture->height = SHORT(mtexture->height);
@@ -524,6 +536,8 @@ void R_InitTextures (void)
 	memcpy (texture->name, mtexture->name, sizeof(texture->name));
 	mpatch = &mtexture->patches[0];
 	patch = &texture->patches[0];
+
+    //debug_phase2("wherehangup5\n");
 
 	for (j=0 ; j<texture->patchcount ; j++, mpatch++, patch++)
 	{
@@ -538,6 +552,8 @@ void R_InitTextures (void)
 	}		
 	texturecolumnlump[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
 	texturecolumnofs[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
+
+    //debug_phase2("wherehangup6\n");
 
 	j = 1;
 	while (j*2 <= texture->width)

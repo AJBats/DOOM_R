@@ -198,6 +198,7 @@ void R_InitSpriteDefs (char** namelist)
     start = firstspritelump-1;
     end = lastspritelump+1;
 	
+    debug_phase3("crashy2?\n");
     // scan all the lump names for each of the names,
     //  noting the highest frame letter.
     // Just compare 4 characters as ints
@@ -233,6 +234,8 @@ void R_InitSpriteDefs (char** namelist)
 		}
 	    }
 	}
+
+    debug_phase3("crashy3?\n");
 	
 	// check the frames that were found for completeness
 	if (maxframe == -1)
@@ -242,6 +245,8 @@ void R_InitSpriteDefs (char** namelist)
 	}
 		
 	maxframe++;
+
+    debug_phase3("crashy4?\n");
 	
 	for (frame = 0 ; frame < maxframe ; frame++)
 	{
@@ -267,6 +272,8 @@ void R_InitSpriteDefs (char** namelist)
 		break;
 	    }
 	}
+
+    debug_phase3("crashy5?\n");
 	
 	// allocate space for the frames present and copy sprtemp to it
 	sprites[i].numframes = maxframe;
@@ -302,6 +309,7 @@ void R_InitSprites (char** namelist)
 	negonearray[i] = -1;
     }
 	
+    debug_phase3("crashy1?\n");
     R_InitSpriteDefs (namelist);
 }
 

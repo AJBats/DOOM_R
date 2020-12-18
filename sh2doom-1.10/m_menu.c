@@ -1867,7 +1867,7 @@ void M_Init (void)
     switch ( gamemode )
     {
       case commercial:
-      printf("commercial gamemode\n");
+      debug_phase1("commercial gamemode\n");
 	// This is used because DOOM 2 had only one HELP
         //  page. I use CREDIT as second page now, but
 	//  kept this hack for educational purposes.
